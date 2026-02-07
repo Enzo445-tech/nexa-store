@@ -3,112 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NEXA DIGITAL STORE</title>
+    <title>NEXA STORE</title>
     <style>
-        :root { --nexa-blue: #00d4ff; --nexa-dark: #050505; --text: #ffffff; }
-        body { background: var(--nexa-dark); color: var(--text); font-family: -apple-system, system-ui, sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        :root { --blue: #00d4ff; --bg: #050505; }
+        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; display: flex; height: 100vh; flex-direction: column; }
         
-        /* SIDEBAR FIX */
-        #sidebar { width: 200px; background: #000; border-right: 1px solid rgba(0,212,255,0.2); padding: 20px; flex-shrink: 0; z-index: 10; }
-        .logo { font-size: 24px; font-weight: 900; color: var(--nexa-blue); text-shadow: 0 0 15px var(--nexa-blue); margin-bottom: 30px; text-align: center; }
-        .menu-item { padding: 15px; margin: 5px 0; border-radius: 8px; cursor: pointer; color: #666; font-weight: 600; transition: 0.3s; -webkit-tap-highlight-color: transparent; }
-        .menu-item.active { color: white; background: rgba(0,212,255,0.15); border-left: 4px solid var(--nexa-blue); }
+        /* NAVIGATION */
+        nav { display: flex; background: #000; padding: 10px; border-bottom: 1px solid #222; overflow-x: auto; gap: 10px; }
+        .tab { padding: 10px 20px; color: #666; cursor: pointer; font-weight: bold; border-radius: 8px; white-space: nowrap; }
+        .tab.active { color: white; background: rgba(0, 212, 255, 0.2); border: 1px solid var(--blue); }
 
-        /* GRID */
-        #content { flex: 1; padding: 20px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-        .section { display: none; }
-        .section.active { display: block; }
+        /* CONTENU */
+        .page { display: none; padding: 20px; overflow-y: auto; }
+        .page.active { display: block; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
-        
-        .card { 
-            aspect-ratio: 2/3; background-color: #1a1a1a; border-radius: 12px; 
-            background-size: cover; background-position: center; 
-            cursor: pointer; display: flex; align-items: flex-end; 
-            border: 2px solid transparent; transition: 0.2s; 
-            -webkit-tap-highlight-color: transparent;
-        }
-        .card:active { transform: scale(0.96); border-color: var(--nexa-blue); }
-        .card-label { background: linear-gradient(transparent, rgba(0,0,0,0.9)); width: 100%; padding: 12px 8px; text-align: center; font-size: 11px; font-weight: bold; border-radius: 0 0 12px 12px; }
 
-        /* MODAL */
-        #modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 100; align-items: center; justify-content: center; padding: 15px; }
-        #modal { background: #0d0d0d; border: 1px solid var(--nexa-blue); width: 100%; max-width: 800px; border-radius: 20px; display: flex; overflow: hidden; }
-        .m-left { flex: 1.2; background: #000; display: flex; align-items: center; }
-        .m-img { width: 100%; aspect-ratio: 16/9; background-size: cover; background-position: center; }
-        .m-right { flex: 1; padding: 25px; display: flex; flex-direction: column; position: relative; }
-        .btn-dl { background: var(--nexa-blue); color: #000; border: none; padding: 16px; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: auto; }
+        /* CARTES */
+        .card { aspect-ratio: 2/3; border-radius: 12px; background-size: cover; background-position: center; border: 2px solid transparent; position: relative; cursor: pointer; background-color: #111; }
+        .card:active { border-color: var(--blue); transform: scale(0.95); }
+        .label { position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.8); padding: 8px 0; text-align: center; font-size: 11px; border-radius: 0 0 12px 12px; }
 
-        @media (max-width: 768px) {
-            body { flex-direction: column; }
-            #sidebar { width: 100%; height: auto; flex-direction: row; padding: 10px; border-right: none; border-bottom: 1px solid #222; overflow-x: auto; }
-            .logo { display: none; }
-            #modal { flex-direction: column; height: 80vh; overflow-y: auto; }
-        }
+        /* MODALE */
+        #overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 100; align-items: center; justify-content: center; padding: 15px; }
+        #modal { background: #0d0d0d; border: 1px solid var(--blue); width: 100%; max-width: 500px; border-radius: 20px; overflow: hidden; }
+        .m-img { width: 100%; aspect-ratio: 16/9; background-size: cover; }
+        .m-txt { padding: 20px; }
+        .btn { width: 100%; background: var(--blue); color: black; border: none; padding: 15px; border-radius: 10px; font-weight: bold; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-<div id="sidebar">
-    <div class="logo">NEXA</div>
-    <div class="menu-item active" onclick="showSection('GAMES', this)">GAMES</div>
-    <div class="menu-item" onclick="showSection('THEMES', this)">THEMES</div>
-    <div class="menu-item" onclick="showSection('APPS', this)">APPS</div>
+<nav>
+    <div class="tab active" onclick="openPage('GAMES', this)">GAMES</div>
+    <div class="tab" onclick="openPage('THEMES', this)">THEMES</div>
+    <div class="tab" onclick="openPage('APPS', this)">APPS</div>
+</nav>
+
+<div id="GAMES" class="page active">
+    <div class="grid" id="grid-games"></div>
 </div>
 
-<div id="content">
-    <div id="GAMES" class="section active">
-        <h2 style="color: var(--nexa-blue);">GAMES</h2>
-        <div class="grid" id="game-grid"></div>
-    </div>
-    
-    <div id="THEMES" class="section">
-        <h2 style="color: var(--nexa-blue);">THEMES</h2>
-        <p style="color: #444;">Aucun thème disponible pour le moment.</p>
-    </div>
-
-    <div id="APPS" class="section">
-        <h2 style="color: var(--nexa-blue);">APPS</h2>
-        <p style="color: #444;">Aucune application disponible pour le moment.</p>
-    </div>
+<div id="THEMES" class="page">
+    <h2 style="color: var(--blue)">THEMES</h2>
+    <p>Bientôt disponible...</p>
 </div>
 
-<div id="modal-overlay" onclick="this.style.display='none'">
+<div id="APPS" class="page">
+    <h2 style="color: var(--blue)">APPS</h2>
+    <p>Bientôt disponible...</p>
+</div>
+
+<div id="overlay" onclick="this.style.display='none'">
     <div id="modal" onclick="event.stopPropagation()">
-        <div class="m-left"><div class="m-img" id="m-img"></div></div>
-        <div class="m-right">
-            <div style="position:absolute; top:15px; right:20px; font-size:30px; cursor:pointer; color:#555;" onclick="document.getElementById('modal-overlay').style.display='none'">×</div>
-            <div class="m-title" id="m-title" style="font-size:24px; font-weight:800; color:var(--nexa-blue); margin-bottom:10px;"></div>
-            <div id="m-desc" style="font-size:13px; color:#aaa; line-height:1.5;"></div>
-            <button class="btn-dl" onclick="alert('Lancement...')">TÉLÉCHARGER</button>
+        <div class="m-img" id="m-img"></div>
+        <div class="m-txt">
+            <h2 id="m-title" style="margin:0; color:var(--blue)"></h2>
+            <p id="m-desc" style="color:#aaa; font-size:14px; margin-top:10px;"></p>
+            <button class="btn" onclick="alert('Téléchargement lancé !')">TÉLÉCHARGER</button>
         </div>
     </div>
 </div>
 
 <script>
-    const gameData = [
-        { name: "GTA V", cover: "https://i.imgur.com/8N69vVv.jpg", bg: "https://i.imgur.com/fA7n6O8.jpg", desc: "Le monde ouvert légendaire de Rockstar Games." },
-        { name: "Burnout Paradise", cover: "https://i.imgur.com/mOAsq9G.jpg", bg: "https://i.imgur.com/XU9p1Cj.jpg", desc: "Courses effrénées et crashs spectaculaires." },
-        { name: "NFS Rivals", cover: "https://i.imgur.com/CscQ3QW.jpg", bg: "https://i.imgur.com/K07Bf5U.jpg", desc: "Choisissez votre camp : flic ou pilote." }
+    const data = [
+        { n: "GTA V", c: "https://i.imgur.com/8N69vVv.jpg", b: "https://i.imgur.com/fA7n6O8.jpg", d: "Le chaos à Los Santos." },
+        { n: "Burnout Paradise", c: "https://i.imgur.com/mOAsq9G.jpg", b: "https://i.imgur.com/XU9p1Cj.jpg", d: "Crashs et vitesse pure." },
+        { n: "NFS Rivals", c: "https://i.imgur.com/CscQ3QW.jpg", b: "https://i.imgur.com/K07Bf5U.jpg", d: "Flics contre Pilotes." }
     ];
 
-    const grid = document.getElementById('game-grid');
-    gameData.forEach(game => {
+    const grid = document.getElementById('grid-games');
+    data.forEach(item => {
         const card = document.createElement('div');
         card.className = 'card';
-        card.style.backgroundImage = `url('${game.cover}')`;
-        card.innerHTML = `<div class="card-label">${game.name}</div>`;
+        card.style.backgroundImage = `url('${item.c}')`;
+        card.innerHTML = `<div class="label">${item.n}</div>`;
         card.onclick = () => {
-            document.getElementById('m-title').innerText = game.name;
-            document.getElementById('m-desc').innerText = game.desc;
-            document.getElementById('m-img').style.backgroundImage = `url('${game.bg}')`;
-            document.getElementById('modal-overlay').style.display = 'flex';
+            document.getElementById('m-title').innerText = item.n;
+            document.getElementById('m-desc').innerText = item.d;
+            document.getElementById('m-img').style.backgroundImage = `url('${item.b}')`;
+            document.getElementById('overlay').style.display = 'flex';
         };
         grid.appendChild(card);
     });
 
-    function showSection(id, btn) {
-        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+    function openPage(id, btn) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         btn.classList.add('active');
     }
