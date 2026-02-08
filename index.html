@@ -138,120 +138,143 @@
         </section>
     </div>
 
-    <div class="modal-overlay" id="modalOverlay" onclick="if(event.target === this) closeModal()">
-        <div class="modal">
-            <div class="modal-close" onclick="closeModal()">×</div>
-            <div class="modal-left" id="modalImg"></div>
-            <div class="modal-right">
-                <h2 class="modal-title" id="modalTitle"></h2>
-                <div class="modal-info">
-                    <div class="info-item">
-                        <span class="info-label">Taille</span>
-                        <span class="info-value" id="modalSize"></span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Content ID</span>
-                        <span class="info-value" id="modalID"></span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Région</span>
-                        <span class="info-value" id="modalRegion">EUR/USA</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Format</span>
-                        <span class="info-value">PKG</span>
-                    </div>
-                </div>
-                <p class="modal-desc" id="modalDesc">Fichier PKG disponible au téléchargement. Installation via USB ou Remote PKG Installer recommandée.</p>
-                <button class="btn-download" onclick="downloadPkg()">⬇️ TÉLÉCHARGER PKG</button>
-            </div>
-        </div>
-    </div>
+  // Utilisation d'un proxy pour contourner le blocage de sécurité (CORS)
+    const PROXY = "https://api.allorigins.win/raw?url=";
+    const FPKGI_URL = encodeURIComponent("https://raw.githubusercontent.com/itssclover/PS4_PKGi_Database/main/pkgi.txt");
 
-    <script>
-        // URL de la base de données PKGi
-        const PKGI_URL = "https://raw.githubusercontent.com/itssclover/PS4_PKGi_Database/main/pkgi.txt";
+    let db = { games: [], apps: [], themes: [], dlc: [] };
+    let currentItem = null;
 
-        let db = { games: [], apps: [], themes: [], dlc: [] };
-        let currentItem = null;
+    async function initStore() {
+        const grid = document.getElementById('gamesGrid');
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 50px;">Chargement de la base FPKGi via Proxy...</div>';
 
-        async function initStore() {
-            try {
-                console.log("🔄 Connexion à la base de données...");
-                const response = await fetch(PKGI_URL);
-                
-                if (!response.ok) throw new Error("Échec de connexion");
-                
-                const text = await response.text();
-                const lines = text.split('\n');
+        try {
+            // Appel via le proxy AllOrigins
+            const response = await fetch(PROXY + FPKGI_URL);
+            
+            if (!response.ok) throw new Error("Erreur de réponse réseau");
+            
+            const text = await response.text();
+            const lines = text.split('\n');
 
-                console.log(`📦 ${lines.length} lignes trouvées`);
+            // Reset des catégories
+            db = { games: [], apps: [], themes: [], dlc: [] };
 
-                // Réinitialiser la base
-                db = { games: [], apps: [], themes: [], dlc: [] };
+            lines.forEach(line => {
+                const parts = line.split(';');
+                if (parts.length >= 3) {
+                    let id = parts[0].trim();
+                    let name = parts[2] ? parts[2].trim() : "Titre Inconnu";
+                    let url = parts[4] ? parts[4].trim() : "";
+                    let size = parts[5] ? parts[5].trim() : "N/A";
 
-                lines.forEach((line, index) => {
-                    line = line.trim();
-                    if (!line || line.startsWith('#')) return;
-                    
-                    const parts = line.split('\t'); // Format TSV (tab-separated)
-                    
-                    if (parts.length >= 4) {
-                        // Format PKGi standard: ContentID \t Type \t Name \t Description \t URL \t Size
-                        const id = parts[0].trim();
-                        const type = parts[1].trim().toLowerCase();
-                        const name = parts[2].trim();
-                        const url = parts[4] ? parts[4].trim() : '#';
-                        const size = parts[5] ? parts[5].trim() : 'N/A';
-
-                        if (!name || !id) return;
-
-                        // Créer l'URL de cover PlayStation
-                        const coverUrl = `https://store.playstation.com/store/api/chihiro/00_09_000/container/US/en/999/${id}/image?w=480&h=720`;
-                        const fallbackCover = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='720'%3E%3Crect fill='%231a1a1a' width='480' height='720'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%2300d4ff' font-size='24' font-weight='bold' font-family='Arial'%3EPS4 PKG%3C/text%3E%3Ctext x='50%25' y='58%25' text-anchor='middle' fill='%23666' font-size='14' font-family='Arial'%3E${id.substring(0,12)}%3C/text%3E%3C/svg%3E`;
-
+                    // On vérifie que c'est un lien valide
+                    if (url.startsWith('http')) {
                         const item = {
                             name: name,
                             id: id,
                             url: url,
                             size: size,
-                            cover: coverUrl,
-                            fallback: fallbackCover
+                            cover: `https://store.playstation.com/store/api/chihiro/00_09_000/container/FR/fr/99/9/${id}/image?w=480&h=480`,
+                            fallback: `https://via.placeholder.com/300x400?text=${encodeURIComponent(name)}`
                         };
 
-                        // Classification selon le type PKGi
-                        if (type.includes('theme')) {
-                            db.themes.push(item);
-                        } else if (type.includes('update') || type.includes('patch') || type.includes('dlc') || type.includes('addon')) {
-                            db.dlc.push(item);
-                        } else if (type.includes('app') || size.includes('MB') || parseFloat(size) < 0.5) {
-                            db.apps.push(item);
-                        } else {
-                            db.games.push(item);
-                        }
+                        // Tri par catégorie
+                        const lowerName = name.toLowerCase();
+                        if (lowerName.includes('theme')) db.themes.push(item);
+                        else if (lowerName.includes('update') || lowerName.includes('dlc') || lowerName.includes('patch')) db.dlc.push(item);
+                        else if (size.includes('KB') || size.includes('MB') || parseFloat(size) < 0.2) db.apps.push(item);
+                        else db.games.push(item);
                     }
-                });
+                }
+            });
 
-                // Masquer le loading
-                const loadingEl = document.getElementById('loadingGames');
-                if (loadingEl) loadingEl.style.display = 'none';
+            renderAll();
 
-                // Mettre à jour les compteurs
-                document.getElementById('gamesCount').textContent = db.games.length;
-                document.getElementById('appsCount').textContent = db.apps.length;
-                document.getElementById('themesCount').textContent = db.themes.length;
-                document.getElementById('dlcCount').textContent = db.dlc.length;
+        } catch (e) {
+            console.error("Erreur de chargement:", e);
+            grid.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
+                    <h2 style="color: #ff4444;">⚠️ Erreur de Connexion</h2>
+                    <p>Le proxy ou GitHub ne répondent pas.</p>
+                    <button onclick="location.reload()" style="margin-top:20px; padding:10px 20px; background:var(--ps5-blue); color:white; border:none; border-radius:10px; cursor:pointer;">Réessayer</button>
+                </div>`;
+        }
+    }
 
-                // Rendre les grilles
-                renderAll();
+    function renderGrid(data, gridId, badge) {
+        const grid = document.getElementById(gridId);
+        if (!grid) return;
+        
+        // On affiche les 150 premiers pour garder la fluidité
+        const displayData = data.slice(0, 150);
+        
+        grid.innerHTML = displayData.map(item => `
+            <div class="card" onclick="openModal('${item.id}')">
+                <div class="card-cover" style="background-image: url('${item.cover}'), url('${item.fallback}')">
+                    <div class="card-badge">${badge}</div>
+                </div>
+                <div class="card-info">
+                    <div class="card-title">${item.name}</div>
+                    <div class="card-meta">
+                        <span>${item.id.substring(0,4)}</span>
+                        <span style="color:var(--accent); font-weight:bold;">${item.size}</span>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
 
-                console.log(`✅ Base chargée: ${db.games.length} jeux, ${db.apps.length} apps, ${db.themes.length} thèmes, ${db.dlc.length} DLC`);
+    function renderAll() {
+        renderGrid(db.games, 'gamesGrid', 'JEU');
+        renderGrid(db.apps, 'appsGrid', 'APP');
+        renderGrid(db.themes, 'themesGrid', 'THEME');
+        renderGrid(db.dlc, 'dlcGrid', 'PATCH');
+    }
 
-            } catch (error) {
-                console.error("❌ Erreur critique:", error);
-                const loadingEl = document.getElementById('loadingGames');
-                if (loadingEl) {
-                    loadingEl.innerHTML = `
+    // Navigation entre les sections
+    document.querySelectorAll('.nav-item').forEach(btn => {
+        btn.onclick = () => {
+            document.querySelectorAll('.nav-item, .section').forEach(el => el.classList.remove('active'));
+            btn.classList.add('active');
+            const sectionId = btn.dataset.section;
+            document.getElementById(sectionId).classList.add('active');
+        };
+    });
+
+    // Barre de recherche
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        const activeSection = document.querySelector('.nav-item.active').dataset.section;
+        const filtered = db[activeSection].filter(g => g.name.toLowerCase().includes(term) || g.id.toLowerCase().includes(term));
+        renderGrid(filtered, activeSection + 'Grid', activeSection.slice(0, -1).toUpperCase());
+    });
+
+    // Ouverture Modale
+    function openModal(id) {
+        const all = [...db.games, ...db.apps, ...db.themes, ...db.dlc];
+        currentItem = all.find(g => g.id === id);
+        if(!currentItem) return;
+        
+        document.getElementById('modalTitle').textContent = currentItem.name;
+        document.getElementById('modalSize').textContent = currentItem.size;
+        document.getElementById('modalID').textContent = currentItem.id;
+        document.getElementById('modalImg').style.backgroundImage = `url('${currentItem.cover}'), url('${currentItem.fallback}')`;
+        document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function closeModal() {
+        document.getElementById('modalOverlay').classList.remove('active');
+    }
+
+    function downloadPkg() {
+        if (currentItem && currentItem.url) {
+            window.open(currentItem.url, '_blank');
+        }
+    }
+
+    window.onload = initStore;
                         <div style="text-align: center; padding: 50px;">
                             <h2 style="color: #ff4444; margin-bottom: 20px;">⚠️ Échec de connexion</h2>
                             <p style="margin-bottom: 30px; color: #999;">La base de données est temporairement inaccessible.</p>
