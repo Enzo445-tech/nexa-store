@@ -1,14 +1,12 @@
-<html lang="fr"><head>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NEXA DIGITAL STORE</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* --- STYLE PS5 ORIGINAL --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --ps5-blue: #0070cc;
             --ps5-white: #ffffff;
@@ -17,19 +15,15 @@
             --ps5-light-gray: #2d2d2d;
             --accent: #00d4ff;
         }
-
         body {
             background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
             color: var(--ps5-white);
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             overflow-x: hidden;
         }
-
-        /* HEADER - PS5 STYLE */
         header {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             padding: 20px 40px;
             display: flex;
@@ -38,1233 +32,160 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
-
         .logo {
-            font-size: 28px;
-            font-weight: 900;
+            font-size: 28px; font-weight: 900;
             background: linear-gradient(135deg, #0070cc, #00d4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             letter-spacing: 2px;
         }
-
-        .search-box {
-            flex: 1;
-            max-width: 500px;
-            margin: 0 40px;
-        }
-
+        .search-box { flex: 1; max-width: 500px; margin: 0 40px; }
         .search-box input {
-            width: 100%;
-            padding: 14px 24px;
+            width: 100%; padding: 14px 24px;
             background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 30px;
-            color: white;
-            font-size: 14px;
-            transition: all 0.3s;
+            border-radius: 30px; color: white;
         }
-
-        .search-box input:focus {
-            outline: none;
-            background: rgba(255, 255, 255, 0.12);
-            border-color: var(--accent);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
-        }
-
-        .search-box input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        .version {
-            background: rgba(0, 112, 204, 0.2);
-            backdrop-filter: blur(10px);
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--accent);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-        }
-
-        /* NAVIGATION - PS5 STYLE */
-        nav {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            padding: 0 40px;
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .nav-item {
-            padding: 20px 32px;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.6);
-            white-space: nowrap;
-            position: relative;
-        }
-
-        .nav-item:hover {
-            color: var(--ps5-white);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .nav-item.active {
-            color: var(--ps5-white);
-            border-bottom-color: var(--ps5-blue);
-        }
-
-        .nav-item.active::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
-        }
-
-        /* MAIN CONTENT */
-        .container {
-            padding: 40px;
-            max-width: 1800px;
-            margin: 0 auto;
-        }
-
-        .section {
-            display: none;
-        }
-
-        .section.active {
-            display: block;
-            animation: fadeIn 0.4s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .section-header {
-            margin-bottom: 35px;
-        }
-
-        .section-title {
-            font-size: 32px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #ffffff, #0070cc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-        }
-
-        .section-subtitle {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 15px;
-        }
-
-        /* GRID - PS5 STYLE */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 30px;
-        }
-
+        .version { background: rgba(0, 112, 204, 0.2); padding: 8px 20px; border-radius: 20px; font-size: 13px; color: var(--accent); }
+        nav { background: rgba(0, 0, 0, 0.5); padding: 0 40px; display: flex; gap: 10px; overflow-x: auto; }
+        .nav-item { padding: 20px 32px; cursor: pointer; color: rgba(255, 255, 255, 0.6); white-space: nowrap; font-weight: 600; }
+        .nav-item.active { color: var(--ps5-white); border-bottom: 3px solid var(--ps5-blue); }
+        .container { padding: 40px; max-width: 1800px; margin: 0 auto; }
+        .section { display: none; }
+        .section.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 30px; }
         .card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            position: relative;
+            background: rgba(255, 255, 255, 0.03); border-radius: 20px; overflow: hidden;
+            cursor: pointer; transition: all 0.4s; border: 1px solid rgba(255, 255, 255, 0.08);
         }
+        .card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3); }
+        .card-cover { width: 100%; aspect-ratio: 3/4; background-size: cover; background-position: center; position: relative; background-color: #222; }
+        .card-badge { position: absolute; top: 10px; right: 10px; background: var(--ps5-blue); color: white; padding: 4px 10px; border-radius: 10px; font-size: 10px; font-weight: bold; }
+        .card-info { padding: 15px; }
+        .card-title { font-size: 14px; font-weight: bold; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-meta { display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.5); }
 
-        .card:hover {
-            transform: translateY(-12px) scale(1.02);
-            border-color: var(--accent);
-            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.4);
-            background: rgba(255, 255, 255, 0.06);
-        }
-
-        .card-cover {
-            width: 100%;
-            aspect-ratio: 3/4;
-            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-
-        .card-badge {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: rgba(0, 112, 204, 0.95);
-            backdrop-filter: blur(10px);
-            color: white;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .card-info {
-            padding: 18px;
-            background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.3));
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: white;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .card-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .card-size {
-            color: var(--accent);
-            font-weight: 700;
-        }
-
-        /* MODAL - PS5 STYLE */
+        /* MODAL */
         .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.92);
-            backdrop-filter: blur(20px);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            animation: fadeIn 0.3s;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center;
         }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal {
-            background: rgba(26, 26, 26, 0.95);
-            backdrop-filter: blur(40px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            max-width: 1100px;
-            width: 100%;
-            max-height: 90vh;
-            overflow: hidden;
-            display: flex;
-            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8);
-            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(60px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .modal-left {
-            flex: 1.3;
-            background: #000;
-            display: flex;
-            flex-direction: column;
-            padding: 0;
-        }
-
-        .modal-gallery {
-            flex: 1;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .gallery-main {
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            transition: opacity 0.3s;
-        }
-
-        .gallery-thumbs {
-            display: flex;
-            gap: 10px;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.8);
-            overflow-x: auto;
-        }
-
-        .thumb {
-            min-width: 80px;
-            height: 60px;
-            background-size: cover;
-            background-position: center;
-            border-radius: 8px;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: all 0.3s;
-            opacity: 0.6;
-        }
-
-        .thumb:hover {
-            opacity: 1;
-            transform: scale(1.05);
-        }
-
-        .thumb.active {
-            border-color: var(--accent);
-            opacity: 1;
-        }
-
-        .modal-right {
-            flex: 1;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 20px;
-            right: 25px;
-            font-size: 40px;
-            cursor: pointer;
-            color: rgba(255, 255, 255, 0.4);
-            transition: 0.3s;
-            z-index: 10;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            border-radius: 50%;
-        }
-
-        .modal-close:hover {
-            color: var(--accent);
-            transform: rotate(90deg);
-            background: rgba(0, 212, 255, 0.2);
-        }
-
-        .modal-title {
-            font-size: 30px;
-            font-weight: 900;
-            background: linear-gradient(135deg, #ffffff, #0070cc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
-            line-height: 1.2;
-        }
-
-        .modal-info {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 18px;
-            margin-bottom: 25px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .info-item {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .info-label {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.5);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-        }
-
-        .info-value {
-            font-size: 15px;
-            font-weight: 700;
-            color: white;
-        }
-
-        .modal-desc {
-            font-size: 14px;
-            line-height: 1.8;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 30px;
-            flex: 1;
-        }
-
+        .modal-overlay.active { display: flex; }
+        .modal { background: #1a1a1a; width: 90%; max-width: 900px; border-radius: 20px; display: flex; overflow: hidden; position: relative; }
+        .modal-left { flex: 1; background-size: cover; background-position: center; min-height: 400px; }
+        .modal-right { flex: 1; padding: 40px; display: flex; flex-direction: column; }
         .btn-download {
-            background: linear-gradient(135deg, #0070cc, #00d4ff);
-            color: white;
-            border: none;
-            padding: 20px;
-            border-radius: 16px;
-            font-size: 16px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            box-shadow: 0 8px 24px rgba(0, 112, 204, 0.4);
+            background: linear-gradient(135deg, #0070cc, #00d4ff); color: white; border: none;
+            padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: auto;
         }
-
-        .btn-download:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(0, 212, 255, 0.6);
-        }
-
-        .btn-download:active {
-            transform: translateY(0);
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            header {
-                padding: 15px 20px;
-            }
-
-            .logo {
-                font-size: 22px;
-            }
-
-            .search-box {
-                display: none;
-            }
-
-            nav {
-                padding: 0 20px;
-            }
-
-            .container {
-                padding: 20px;
-            }
-
-            .grid {
-                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-                gap: 20px;
-            }
-
-            .modal {
-                flex-direction: column;
-                max-height: 90vh;
-            }
-
-            .modal-left {
-                min-height: 300px;
-            }
-
-            .modal-right {
-                padding: 25px;
-            }
-        }
+        .modal-close { position: absolute; top: 20px; right: 20px; font-size: 30px; cursor: pointer; color: white; z-index: 10; }
     </style>
 </head>
 <body>
 
-    <!-- HEADER -->
     <header>
         <div class="logo">NEXA STORE</div>
         <div class="search-box">
-            <input type="text" placeholder="Rechercher un jeu, une app, un thème..." id="searchInput">
+            <input type="text" placeholder="Rechercher dans la base FPKGi..." id="searchInput">
         </div>
-        <div class="version">V1.0</div>
+        <div class="version">LIVE DB</div>
     </header>
 
-    <!-- NAVIGATION -->
     <nav>
-        <div class="nav-item active" data-section="games">JEUX</div>
-        <div class="nav-item" data-section="apps">APPLICATIONS</div>
-        <div class="nav-item" data-section="themes">THÈMES</div>
-        <div class="nav-item" data-section="dlc">DLC &amp; UPDATES</div>
+        <div class="nav-item active" data-section="games">JEUX FPKGI</div>
     </nav>
 
-    <!-- MAIN CONTENT -->
     <div class="container">
-        <!-- GAMES SECTION -->
         <section id="games" class="section active">
-            <div class="section-header">
-                <h1 class="section-title">Jeux Disponibles</h1>
-                <p class="section-subtitle">Téléchargez vos jeux PS4 favoris au format PKG</p>
-            </div>
-            <div class="grid" id="gamesGrid"><div class="card">
-                    <div class="card-cover" style="background-image: url('https://image.api.playstation.com/vulcan/ap/rnd/202202/2816/8cX4Lf5w4MoSCMlTH1VkzKNz.png')">
-                        <div class="card-badge">POPULAIRE</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">Grand Theft Auto V</div>
-                        <div class="card-meta">
-                            <span>EUR</span>
-                            <span class="card-size">76.5 GB</span>
-                        </div>
-                    </div>
-                </div><div class="card">
-                    <div class="card-cover" style="background-image: url('https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/aqWGpBdRfDDNHgaGuVTrfLoL.png')">
-                        <div class="card-badge">POPULAIRE</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">Red Dead Redemption 2</div>
-                        <div class="card-meta">
-                            <span>EUR</span>
-                            <span class="card-size">105.3 GB</span>
-                        </div>
-                    </div>
-                </div><div class="card">
-                    <div class="card-cover" style="background-image: url('https://image.api.playstation.com/vulcan/img/rnd/202011/1623/ku0ybvf7tXdZ7LlSlKDdtdCO.png')">
-                        <div class="card-badge">RPG</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">The Witcher 3</div>
-                        <div class="card-meta">
-                            <span>EUR</span>
-                            <span class="card-size">50.2 GB</span>
-                        </div>
-                    </div>
-                </div><div class="card">
-                    <div class="card-cover" style="background-image: url('https://image.api.playstation.com/vulcan/ap/rnd/202010/0114/ERNPc4gFqeRDQV7lHOkUbMhJ.png')">
-                        <div class="card-badge">EXCLUSIF</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">God of War</div>
-                        <div class="card-meta">
-                            <span>EUR</span>
-                            <span class="card-size">44.5 GB</span>
-                        </div>
-                    </div>
-                </div><div class="card">
-                    <div class="card-cover" style="background-image: url('https://image.api.playstation.com/vulcan/ap/rnd/202009/2419/Cczlkq0fmF8hDYOTBX4Vl3do.png')">
-                        <div class="card-badge">EXCLUSIF</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">Spider-Man</div>
-                        <div class="card-meta">
-                            <span>USA</span>
-                            <span class="card-size">45.1 GB</span>
-                        </div>
-                    </div>
-                </div><div class="card">
-                    <div class="card-cover" style="background-image: url('https://image.api.playstation.com/vulcan/img/rnd/202009/2923/jAT7HjpL0iKSosd3wL8lTxJD.png')">
-                        <div class="card-badge">RPG</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">Horizon Zero Dawn</div>
-                        <div class="card-meta">
-                            <span>EUR</span>
-                            <span class="card-size">39.7 GB</span>
-                        </div>
-                    </div>
-                </div><div class="card">
-                    <div class="card-cover" style="background-image: url('https://image.api.playstation.com/vulcan/img/rnd/202010/2618/RiAe2fHEcJnBEMlLc9eNSNNW.png')">
-                        <div class="card-badge">AVENTURE</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">Uncharted 4</div>
-                        <div class="card-meta">
-                            <span>EUR</span>
-                            <span class="card-size">49.8 GB</span>
-                        </div>
-                    </div>
-                </div><div class="card">
-                    <div class="card-cover" style="background-image: url('https://image.api.playstation.com/vulcan/ap/rnd/202308/1007/54c41b3e84c6eddcf64eee26cf87e6e7c3fa0f4285e2b5ef.png')">
-                        <div class="card-badge">FPS</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">Call of Duty Modern Warfare</div>
-                        <div class="card-meta">
-                            <span>USA</span>
-                            <span class="card-size">92.4 GB</span>
-                        </div>
-                    </div>
-                </div><div class="card">
-                    <div class="card-cover" style="background-image: url('https://image.api.playstation.com/vulcan/ap/rnd/202105/1714/5tHAFN1zUCsJ9b6QhQIbLsXa.png')">
-                        <div class="card-badge">SANDBOX</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">Minecraft</div>
-                        <div class="card-meta">
-                            <span>USA</span>
-                            <span class="card-size">1.2 GB</span>
-                        </div>
-                    </div>
-                </div><div class="card">
-                    <div class="card-cover" style="background-image: url('https://image.api.playstation.com/vulcan/img/rnd/202010/2614/NVmnBXze9ElHzj3SmykrJLIV.png')">
-                        <div class="card-badge">ACTION</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">Bloodborne</div>
-                        <div class="card-meta">
-                            <span>EUR</span>
-                            <span class="card-size">33.1 GB</span>
-                        </div>
-                    </div>
-                </div></div>
-        </section>
-
-        <!-- APPS SECTION -->
-        <section id="apps" class="section">
-            <div class="section-header">
-                <h1 class="section-title">Applications</h1>
-                <p class="section-subtitle">Utilitaires et homebrew pour PS4</p>
-            </div>
-            <div class="grid" id="appsGrid"><div class="card">
-                    <div class="card-cover" style="background-image: url('https://i.ibb.co/ZMxJ9Qh/orbis.png')">
-                        <div class="card-badge">HOMEBREW</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">PS4 Orbis Toolbox</div>
-                        <div class="card-meta">
-                            <span>ALL</span>
-                            <span class="card-size">12.5 MB</span>
-                        </div>
-                    </div>
-                </div><div class="card">
-                    <div class="card-cover" style="background-image: url('https://i.ibb.co/5GWLP6j/ftp.png')">
-                        <div class="card-badge">UTIL</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">FTP Server</div>
-                        <div class="card-meta">
-                            <span>ALL</span>
-                            <span class="card-size">8.1 MB</span>
-                        </div>
-                    </div>
-                </div><div class="card">
-                    <div class="card-cover" style="background-image: url('https://i.ibb.co/WDj5Qjm/apollo.png')">
-                        <div class="card-badge">SAVE</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">Apollo Save Tool</div>
-                        <div class="card-meta">
-                            <span>ALL</span>
-                            <span class="card-size">15.3 MB</span>
-                        </div>
-                    </div>
-                </div><div class="card">
-                    <div class="card-cover" style="background-image: url('https://i.ibb.co/KzKZ8gN/pkg.png')">
-                        <div class="card-badge">INSTALL</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">Remote PKG Installer</div>
-                        <div class="card-meta">
-                            <span>ALL</span>
-                            <span class="card-size">5.7 MB</span>
-                        </div>
-                    </div>
-                </div><div class="card">
-                    <div class="card-cover" style="background-image: url('https://i.ibb.co/qpHjQSN/webman.png')">
-                        <div class="card-badge">MOD</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">Webman MOD</div>
-                        <div class="card-meta">
-                            <span>ALL</span>
-                            <span class="card-size">3.2 MB</span>
-                        </div>
-                    </div>
-                </div></div>
-        </section>
-
-        <!-- THEMES SECTION -->
-        <section id="themes" class="section">
-            <div class="section-header">
-                <h1 class="section-title">Thèmes Personnalisés</h1>
-                <p class="section-subtitle">Personnalisez votre interface PS4</p>
-            </div>
-            <div class="grid" id="themesGrid"><div class="card">
-                    <div class="card-cover" style="background-image: url('https://i.ibb.co/VTBc6yj/cyber.png')">
-                        <div class="card-badge">ANIMÉ</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">Cyberpunk 2077 Dynamic</div>
-                        <div class="card-meta">
-                            <span>ALL</span>
-                            <span class="card-size">85 MB</span>
-                        </div>
-                    </div>
-                </div><div class="card">
-                    <div class="card-cover" style="background-image: url('https://i.ibb.co/WsYm8Rf/ghost.png')">
-                        <div class="card-badge">EXCLUSIF</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">Ghost of Tsushima</div>
-                        <div class="card-meta">
-                            <span>ALL</span>
-                            <span class="card-size">78 MB</span>
-                        </div>
-                    </div>
-                </div><div class="card">
-                    <div class="card-cover" style="background-image: url('https://i.ibb.co/mH4kqX2/neon.png')">
-                        <div class="card-badge">MINIMAL</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">Neon City Minimal</div>
-                        <div class="card-meta">
-                            <span>ALL</span>
-                            <span class="card-size">45 MB</span>
-                        </div>
-                    </div>
-                </div><div class="card">
-                    <div class="card-cover" style="background-image: url('https://i.ibb.co/7rN5Kwg/retro.png')">
-                        <div class="card-badge">RÉTRO</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">Retro Wave 80s</div>
-                        <div class="card-meta">
-                            <span>ALL</span>
-                            <span class="card-size">52 MB</span>
-                        </div>
-                    </div>
-                </div></div>
-        </section>
-
-        <!-- DLC SECTION -->
-        <section id="dlc" class="section">
-            <div class="section-header">
-                <h1 class="section-title">DLC &amp; Mises à jour</h1>
-                <p class="section-subtitle">Contenus additionnels et patchs</p>
-            </div>
-            <div class="grid" id="dlcGrid"><div class="card">
-                    <div class="card-cover" style="background-image: url('https://image.api.playstation.com/vulcan/ap/rnd/202211/0711/qh1nT9XL9DKKWDdWaOtLWiaP.png')">
-                        <div class="card-badge">DLC</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">The Witcher 3 - Blood and Wine</div>
-                        <div class="card-meta">
-                            <span>EUR</span>
-                            <span class="card-size">14.2 GB</span>
-                        </div>
-                    </div>
-                </div><div class="card">
-                    <div class="card-cover" style="background-image: url('https://image.api.playstation.com/vulcan/ap/rnd/202206/0720/K7p6puZbDCX4OFMpXImKUv47.png')">
-                        <div class="card-badge">DLC</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">Horizon Zero Dawn - Frozen Wilds</div>
-                        <div class="card-meta">
-                            <span>EUR</span>
-                            <span class="card-size">6.8 GB</span>
-                        </div>
-                    </div>
-                </div><div class="card">
-                    <div class="card-cover" style="background-image: url('https://image.api.playstation.com/vulcan/ap/rnd/202208/0921/h6yF9kN8R7vZvGDVT6wGcaLj.png')">
-                        <div class="card-badge">DLC</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">Spider-Man - City That Never Sleeps</div>
-                        <div class="card-meta">
-                            <span>USA</span>
-                            <span class="card-size">8.5 GB</span>
-                        </div>
-                    </div>
-                </div><div class="card">
-                    <div class="card-cover" style="background-image: url('https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/mK3J8H7b3lV9cT2bDfR0pYwQ.png')">
-                        <div class="card-badge">DLC</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">Bloodborne - The Old Hunters</div>
-                        <div class="card-meta">
-                            <span>EUR</span>
-                            <span class="card-size">9.1 GB</span>
-                        </div>
-                    </div>
-                </div></div>
+            <div class="grid" id="gamesGrid">
+                </div>
         </section>
     </div>
 
-    <!-- MODAL -->
-    <div class="modal-overlay active" id="modalOverlay">
+    <div class="modal-overlay" id="modalOverlay">
         <div class="modal">
             <div class="modal-close" onclick="closeModal()">×</div>
-            <div class="modal-left">
-                <div class="modal-gallery">
-                    <div class="gallery-main" id="galleryMain" style="background-image: url(&quot;https://image.api.playstation.com/vulcan/ap/rnd/202105/1714/2rIE5yajd4wN7yD1s5ZZfMEz.jpg&quot;);"></div>
-                </div>
-                <div class="gallery-thumbs" id="galleryThumbs"><div class="thumb active" style="background-image: url(&quot;https://image.api.playstation.com/vulcan/ap/rnd/202105/1714/2rIE5yajd4wN7yD1s5ZZfMEz.jpg&quot;);"></div><div class="thumb" style="background-image: url(&quot;https://image.api.playstation.com/vulcan/ap/rnd/202105/1714/3KbqTXfRd5eRvbPwONMbvSHX.jpg&quot;);"></div><div class="thumb" style="background-image: url(&quot;https://image.api.playstation.com/vulcan/ap/rnd/202105/1714/7YHxKQpTDQ9QV8WY7hU3z8Kq.jpg&quot;);"></div><div class="thumb" style="background-image: url(&quot;https://image.api.playstation.com/vulcan/ap/rnd/202105/1714/0PDlGFD1BYxLPmbM5PVnqW6Q.jpg&quot;);"></div></div>
-            </div>
+            <div class="modal-left" id="modalImg"></div>
             <div class="modal-right">
-                <h2 class="modal-title" id="modalTitle">Minecraft</h2>
-                <div class="modal-info">
-                    <div class="info-item">
-                        <span class="info-label">Taille</span>
-                        <span class="info-value" id="modalSize">1.2 GB</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Version</span>
-                        <span class="info-value" id="modalVersion">1.99</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Région</span>
-                        <span class="info-value" id="modalRegion">USA</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Format</span>
-                        <span class="info-value" id="modalFormat">PKG</span>
-                    </div>
+                <h2 id="modalTitle" style="margin-bottom:20px;"></h2>
+                <p id="modalDesc" style="color:gray; font-size: 14px; margin-bottom:20px;"></p>
+                <div style="margin-bottom:20px; font-size: 14px;">
+                    <p>Taille: <span id="modalSize" style="color:var(--accent)"></span></p>
+                    <p>ID: <span id="modalID" style="color:var(--accent)"></span></p>
                 </div>
-                <div class="modal-desc" id="modalDesc">Construisez, explorez, survivez. Le jeu bac à sable le plus populaire au monde. Créez votre univers en solo ou en multijoueur. Liberté totale de création dans ce phénomène mondial.</div>
-                <button class="btn-download" onclick="downloadPkg()">
-                    ⬇️ TÉLÉCHARGER PKG
-                </button>
+                <button class="btn-download" onclick="downloadPkg()">⬇️ TÉLÉCHARGER PKG</button>
             </div>
         </div>
     </div>
 
     <script>
-        // BASE DE DONNÉES - IMAGES CORRIGÉES
-        const gamesData = [
-            {
-                name: "Grand Theft Auto V",
-                cover: "https://image.api.playstation.com/vulcan/ap/rnd/202202/2816/8cX4Lf5w4MoSCMlTH1VkzKNz.png",
-                screenshots: [
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202202/2816/CcfuNNfyq79h5cZWK38gWAc3.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202202/2816/RGNthALjqHzJAG7wVcUvKAC3.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202202/2816/NJvMJStTlGFT6XcHcTMbJJnT.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202202/2816/yj0PNKF9jlWFa1zJgIhFvzCR.jpg"
-                ],
-                size: "76.5 GB",
-                version: "1.33",
-                region: "EUR",
-                format: "PKG",
-                badge: "POPULAIRE",
-                desc: "Explorez le monde ouvert légendaire de Los Santos dans cette aventure criminelle signée Rockstar Games. Incarnez trois criminels différents dans une histoire épique de braquages et de poursuites. Découvrez un monde vivant et dynamique avec des centaines d'heures de contenu."
-            },
-            {
-                name: "Red Dead Redemption 2",
-                cover: "https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/aqWGpBdRfDDNHgaGuVTrfLoL.png",
-                screenshots: [
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/9fhXlJAsDASzCNKbYsIhd7yF.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/4RJyyHOX35PdYdO5oBn5JhFj.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/T38rJLkwvpCvb9xLxkqAOGdT.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/bQHZLmLUhqKqWHhBFJbKLpCN.jpg"
-                ],
-                size: "105.3 GB",
-                version: "1.29",
-                region: "EUR",
-                format: "PKG",
-                badge: "POPULAIRE",
-                desc: "L'Ouest sauvage comme vous ne l'avez jamais vu. Suivez Arthur Morgan dans cette épopée western signée Rockstar Games. Un chef-d'œuvre narratif qui redéfinit le jeu en monde ouvert avec des graphismes époustouflants et une histoire captivante."
-            },
-            {
-                name: "The Witcher 3",
-                cover: "https://image.api.playstation.com/vulcan/img/rnd/202011/1623/ku0ybvf7tXdZ7LlSlKDdtdCO.png",
-                screenshots: [
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202211/0711/kh4MUIuMmHlktOHar3lVl6rY.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202211/0711/VIXMAb1rT8S9Ak1lMbvI6ZOl.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202211/0711/H7QJ3zwgv4u92DJ7GJwhH3SJ.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202211/0711/j7GFvLxQHBL2r2aDN7OaP6PH.jpg"
-                ],
-                size: "50.2 GB",
-                version: "1.32",
-                region: "EUR",
-                format: "PKG",
-                badge: "RPG",
-                desc: "Incarnez Geralt de Riv dans cette aventure épique primée. Chassez les monstres, explorez un monde ouvert magnifique et vivez une histoire inoubliable dans cet RPG d'action considéré comme l'un des meilleurs jeux de tous les temps."
-            },
-            {
-                name: "God of War",
-                cover: "https://image.api.playstation.com/vulcan/ap/rnd/202010/0114/ERNPc4gFqeRDQV7lHOkUbMhJ.png",
-                screenshots: [
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/4wjML2fWv3MJ8jHzFGPUOVUi.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/dQXhVHCq6pN2Q8pYnGYTGqKI.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/nj6LmFuykixAvjGhxPEFWgn8.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/9qsZqPW0gDsZT5VBRYxqcDTy.jpg"
-                ],
-                size: "44.5 GB",
-                version: "1.35",
-                region: "EUR",
-                format: "PKG",
-                badge: "EXCLUSIF",
-                desc: "Kratos revient dans une aventure nordique épique. Accompagné de son fils Atreus, affrontez dieux et monstres dans ce chef-d'œuvre de Santa Monica Studio. Une refonte complète de la franchise qui a remporté le prix du jeu de l'année."
-            },
-            {
-                name: "Spider-Man",
-                cover: "https://image.api.playstation.com/vulcan/ap/rnd/202009/2419/Cczlkq0fmF8hDYOTBX4Vl3do.png",
-                screenshots: [
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202208/0921/dR7s4VWG6RMppDsBAeC8NYX0.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202208/0921/zjgaKyDc8VbH0fdjVsHJpdNd.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202208/0921/8kH2OgxBGWVHkZHd8XSR4S2m.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202208/0921/Z3SboGLJbGATfH7R2Q0I7K0f.jpg"
-                ],
-                size: "45.1 GB",
-                version: "1.19",
-                region: "USA",
-                format: "PKG",
-                badge: "EXCLUSIF",
-                desc: "Incarnez Peter Parker et survolez New York dans cette aventure spectaculaire. Combattez le crime et affrontez des super-vilains emblématiques de l'univers Marvel. Le meilleur jeu Spider-Man jamais créé avec un gameplay fluide et une ville vivante."
-            },
-            {
-                name: "Horizon Zero Dawn",
-                cover: "https://image.api.playstation.com/vulcan/img/rnd/202009/2923/jAT7HjpL0iKSosd3wL8lTxJD.png",
-                screenshots: [
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202206/0720/ga9pD7eBiqvmKAVSJh66bEHS.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202206/0720/xtGv5K5drfkiKZrV8eLDwELR.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202206/0720/t0pLB3kAeAOLQPBq86pQGM04.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202206/0720/0Ec6pnrAfMW59YKqw18G2Y3p.jpg"
-                ],
-                size: "39.7 GB",
-                version: "1.52",
-                region: "EUR",
-                format: "PKG",
-                badge: "RPG",
-                desc: "Explorez un monde post-apocalyptique peuplé de machines-créatures. Suivez l'histoire d'Aloy dans cette exclusivité PS4 acclamée par la critique. Un univers riche, des combats tactiques et une histoire fascinante vous attendent."
-            },
-            {
-                name: "Uncharted 4",
-                cover: "https://image.api.playstation.com/vulcan/img/rnd/202010/2618/RiAe2fHEcJnBEMlLc9eNSNNW.png",
-                screenshots: [
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202208/1007/Y0FeZiw9QJHODMvQJTnDKaL9.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202208/1007/GfQEOmg9JfMFHrhIYhzALTn8.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202208/1007/scN5HBb4F5jLJ8o9Vs3CWHGY.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202208/1007/2tCJnPJqz7gKe5vYsgTTGsj5.jpg"
-                ],
-                size: "49.8 GB",
-                version: "1.30",
-                region: "EUR",
-                format: "PKG",
-                badge: "AVENTURE",
-                desc: "La dernière aventure de Nathan Drake. Parcourez le globe à la recherche d'un trésor de pirate légendaire dans cette conclusion spectaculaire de la saga. Action cinématographique et graphismes époustouflants signés Naughty Dog."
-            },
-            {
-                name: "Call of Duty Modern Warfare",
-                cover: "https://image.api.playstation.com/vulcan/ap/rnd/202308/1007/54c41b3e84c6eddcf64eee26cf87e6e7c3fa0f4285e2b5ef.png",
-                screenshots: [
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202308/1007/67ef77aace0c1dbb20e90f8c7ca74c24863c69aece966af6.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202308/1007/6b8e7a9d6d951b8e1e9a9a8e9e9e9e9e9e9e9e9e.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202308/1007/0a0b0c0d0e0f1a1b1c1d1e1f2a2b2c2d2e2f3a3b.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202308/1007/4a4b4c4d4e4f5a5b5c5d5e5f6a6b6c6d6e6f7a7b.jpg"
-                ],
-                size: "92.4 GB",
-                version: "1.26",
-                region: "USA",
-                format: "PKG",
-                badge: "FPS",
-                desc: "Guerre moderne redéfinie. Campagne intense, multijoueur tactique et mode Warzone gratuit. L'expérience FPS de référence sur PS4 avec des graphismes photorealistic et un gameplay nerveux."
-            },
-            {
-                name: "Minecraft",
-                cover: "https://image.api.playstation.com/vulcan/ap/rnd/202105/1714/5tHAFN1zUCsJ9b6QhQIbLsXa.png",
-                screenshots: [
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202105/1714/2rIE5yajd4wN7yD1s5ZZfMEz.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202105/1714/3KbqTXfRd5eRvbPwONMbvSHX.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202105/1714/7YHxKQpTDQ9QV8WY7hU3z8Kq.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202105/1714/0PDlGFD1BYxLPmbM5PVnqW6Q.jpg"
-                ],
-                size: "1.2 GB",
-                version: "1.99",
-                region: "USA",
-                format: "PKG",
-                badge: "SANDBOX",
-                desc: "Construisez, explorez, survivez. Le jeu bac à sable le plus populaire au monde. Créez votre univers en solo ou en multijoueur. Liberté totale de création dans ce phénomène mondial."
-            },
-            {
-                name: "Bloodborne",
-                cover: "https://image.api.playstation.com/vulcan/img/rnd/202010/2614/NVmnBXze9ElHzj3SmykrJLIV.png",
-                screenshots: [
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/0wvqmkl2G2L5c4I5V5nGcD5e.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/XuUKnRvlH6PNMFP3Y5KoXg7a.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/NHs2ZXKgV8OpV8N9JFvGFNDj.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/7p8w9a0b1c2d3e4f5g6h7i8j9k0l.jpg"
-                ],
-                size: "33.1 GB",
-                version: "1.09",
-                region: "EUR",
-                format: "PKG",
-                badge: "ACTION",
-                desc: "Plongez dans les ténèbres de Yharnam. Un action-RPG gothique signé FromSoftware, créateurs de Dark Souls. Défiez votre destin dans cet exclusif PS4 exigeant et addictif."
-            }
-        ];
+        const FPKGI_URL = "https://raw.githubusercontent.com/r00t-3xp1o1t/fP_PKG_installer/master/db.txt";
+        let allGames = [];
+        let currentItem = null;
 
-        const appsData = [
-            {
-                name: "PS4 Orbis Toolbox",
-                cover: "https://i.ibb.co/ZMxJ9Qh/orbis.png",
-                screenshots: [
-                    "https://i.ibb.co/ZMxJ9Qh/orbis.png",
-                    "https://i.ibb.co/ZMxJ9Qh/orbis.png"
-                ],
-                size: "12.5 MB",
-                version: "1.5.2",
-                region: "ALL",
-                format: "PKG",
-                badge: "HOMEBREW",
-                desc: "Boîte à outils complète pour PS4 jailbreakée. Gestionnaire de fichiers, éditeur de sauvegardes, backup manager et bien plus. Indispensable pour toute console modifiée."
-            },
-            {
-                name: "FTP Server",
-                cover: "https://i.ibb.co/5GWLP6j/ftp.png",
-                screenshots: [
-                    "https://i.ibb.co/5GWLP6j/ftp.png"
-                ],
-                size: "8.1 MB",
-                version: "2.1",
-                region: "ALL",
-                format: "PKG",
-                badge: "UTIL",
-                desc: "Serveur FTP pour PS4. Transférez vos fichiers PKG, sauvegardes et médias depuis votre PC via le réseau local. Simple, rapide et efficace."
-            },
-            {
-                name: "Apollo Save Tool",
-                cover: "https://i.ibb.co/WDj5Qjm/apollo.png",
-                screenshots: [
-                    "https://i.ibb.co/WDj5Qjm/apollo.png"
-                ],
-                size: "15.3 MB",
-                version: "1.9.0",
-                region: "ALL",
-                format: "PKG",
-                badge: "SAVE",
-                desc: "Éditeur de sauvegardes avancé. Débloquez tous les trophées, modifiez vos stats, importez des sauvegardes. Compatible avec des centaines de jeux PS4."
-            },
-            {
-                name: "Remote PKG Installer",
-                cover: "https://i.ibb.co/KzKZ8gN/pkg.png",
-                screenshots: [
-                    "https://i.ibb.co/KzKZ8gN/pkg.png"
-                ],
-                size: "5.7 MB",
-                version: "1.3",
-                region: "ALL",
-                format: "PKG",
-                badge: "INSTALL",
-                desc: "Installez vos PKG à distance depuis votre PC. Plus besoin de clé USB ! Envoyez vos jeux directement via le réseau local."
-            },
-            {
-                name: "Webman MOD",
-                cover: "https://i.ibb.co/qpHjQSN/webman.png",
-                screenshots: [
-                    "https://i.ibb.co/qpHjQSN/webman.png"
-                ],
-                size: "3.2 MB",
-                version: "1.47.42",
-                region: "ALL",
-                format: "PKG",
-                badge: "MOD",
-                desc: "Interface web pour gérer votre PS4. Montez vos ISO, contrôlez les ventilateurs, gérez les fichiers. Accessible depuis n'importe quel navigateur."
-            }
-        ];
+        // --- CHARGEMENT DE LA BASE DE DONNÉES ---
+        async function initStore() {
+            try {
+                const response = await fetch(FPKGI_URL);
+                const text = await response.text();
+                const lines = text.split('\n');
 
-        const themesData = [
-            {
-                name: "Cyberpunk 2077 Dynamic",
-                cover: "https://i.ibb.co/VTBc6yj/cyber.png",
-                screenshots: [
-                    "https://i.ibb.co/VTBc6yj/cyber.png"
-                ],
-                size: "85 MB",
-                version: "1.0",
-                region: "ALL",
-                format: "PKG",
-                badge: "ANIMÉ",
-                desc: "Thème dynamique Cyberpunk 2077. Interface futuriste avec animations, effets néon et musique d'ambiance. Transformez votre PS4 en console du futur."
-            },
-            {
-                name: "Ghost of Tsushima",
-                cover: "https://i.ibb.co/WsYm8Rf/ghost.png",
-                screenshots: [
-                    "https://i.ibb.co/WsYm8Rf/ghost.png"
-                ],
-                size: "78 MB",
-                version: "1.0",
-                region: "ALL",
-                format: "PKG",
-                badge: "EXCLUSIF",
-                desc: "Thème inspiré du Japon féodal. Cerisiers en fleurs, samouraï et ambiance zen. Design minimaliste et élégant pour un look authentique."
-            },
-            {
-                name: "Neon City Minimal",
-                cover: "https://i.ibb.co/mH4kqX2/neon.png",
-                screenshots: [
-                    "https://i.ibb.co/mH4kqX2/neon.png"
-                ],
-                size: "45 MB",
-                version: "1.0",
-                region: "ALL",
-                format: "PKG",
-                badge: "MINIMAL",
-                desc: "Interface minimaliste avec effets néon. Design moderne, couleurs vives et animations fluides. Parfait pour un look clean et futuriste."
-            },
-            {
-                name: "Retro Wave 80s",
-                cover: "https://i.ibb.co/7rN5Kwg/retro.png",
-                screenshots: [
-                    "https://i.ibb.co/7rN5Kwg/retro.png"
-                ],
-                size: "52 MB",
-                version: "1.0",
-                region: "ALL",
-                format: "PKG",
-                badge: "RÉTRO",
-                desc: "Voyage dans les années 80. Style synthwave, grilles néon et couleurs flashy. Nostalgie garantie avec une touche moderne et stylée."
+                lines.forEach(line => {
+                    const parts = line.split(';');
+                    if (parts.length >= 4) {
+                        const contentID = parts[1].trim();
+                        allGames.push({
+                            name: parts[0].trim(),
+                            id: contentID,
+                            url: parts[2].trim(),
+                            size: parts[3].trim(),
+                            // Utilisation de l'icône officielle PSN via Content ID
+                            cover: `https://store.playstation.com/store/api/chihiro/00_09_000/container/FR/fr/99/9/${contentID}/image?w=480&h=480`
+                        });
+                    }
+                });
+                render(allGames);
+            } catch (e) {
+                console.error("Erreur DB:", e);
+                document.getElementById('gamesGrid').innerHTML = "<p>Erreur de connexion à FPKGi</p>";
             }
-        ];
+        }
 
-        const dlcData = [
-            {
-                name: "The Witcher 3 - Blood and Wine",
-                cover: "https://image.api.playstation.com/vulcan/ap/rnd/202211/0711/qh1nT9XL9DKKWDdWaOtLWiaP.png",
-                screenshots: [
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202211/0711/L6RiMxFpqYqPCbDZj5GDTcYk.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202211/0711/zaTBNj7K98m9P6jR2Hv8fzYL.jpg"
-                ],
-                size: "14.2 GB",
-                version: "1.0",
-                region: "EUR",
-                format: "PKG",
-                badge: "DLC",
-                desc: "Extension majeure de The Witcher 3. Explorez le duché de Toussaint, 30h de contenu additionnel, nouvelles quêtes et boss inédits. Un must-have!"
-            },
-            {
-                name: "Horizon Zero Dawn - Frozen Wilds",
-                cover: "https://image.api.playstation.com/vulcan/ap/rnd/202206/0720/K7p6puZbDCX4OFMpXImKUv47.png",
-                screenshots: [
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202206/0720/LhLR9x8Hj5cI2POaHxHWfD5p.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202206/0720/njFrM3J8T2lFDFqCwBV0ZQcX.jpg"
-                ],
-                size: "6.8 GB",
-                version: "1.0",
-                region: "EUR",
-                format: "PKG",
-                badge: "DLC",
-                desc: "Explorez les terres glacées du nord. Nouvelles machines, armes et compétences. Une extension indispensable pour prolonger l'aventure d'Aloy."
-            },
-            {
-                name: "Spider-Man - City That Never Sleeps",
-                cover: "https://image.api.playstation.com/vulcan/ap/rnd/202208/0921/h6yF9kN8R7vZvGDVT6wGcaLj.png",
-                screenshots: [
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202208/0921/vxDM2h4j3jgY9bV3WvN0cGqR.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202208/0921/QLpHk7VwJ9DfWt2LGv4JfKmP.jpg"
-                ],
-                size: "8.5 GB",
-                version: "1.0",
-                region: "USA",
-                format: "PKG",
-                badge: "DLC",
-                desc: "Pack de 3 DLC : The Heist, Turf Wars et Silver Lining. Nouvelles histoires, costumes exclusifs et défis supplémentaires pour Spider-Man."
-            },
-            {
-                name: "Bloodborne - The Old Hunters",
-                cover: "https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/mK3J8H7b3lV9cT2bDfR0pYwQ.png",
-                screenshots: [
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/F6g8H9j0K1l2M3n4P5q6R7s8.jpg",
-                    "https://image.api.playstation.com/vulcan/ap/rnd/202207/1210/T9u0V1w2X3y4Z5a6B7c8D9e0.jpg"
-                ],
-                size: "9.1 GB",
-                version: "1.0",
-                region: "EUR",
-                format: "PKG",
-                badge: "DLC",
-                desc: "Extension de Bloodborne. Nouvelles zones, armes uniques et boss légendaires. Difficulté encore plus élevée pour les chasseurs aguerris."
-            }
-        ];
-
-        // RENDER FUNCTIONS
-        function renderItems(data, gridId) {
-            const grid = document.getElementById(gridId);
-            grid.innerHTML = '';
-            
-            data.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <div class="card-cover" style="background-image: url('${item.cover}')">
-                        ${item.badge ? `<div class="card-badge">${item.badge}</div>` : ''}
+        // --- AFFICHAGE DES CARTES ---
+        function render(data) {
+            const grid = document.getElementById('gamesGrid');
+            grid.innerHTML = data.map(item => `
+                <div class="card" onclick="openModal('${item.id}')">
+                    <div class="card-cover" style="background-image: url('${item.cover}'), url('https://via.placeholder.com/300x400?text=PS4+PKG')">
+                        <div class="card-badge">FPKGI</div>
                     </div>
                     <div class="card-info">
                         <div class="card-title">${item.name}</div>
                         <div class="card-meta">
-                            <span>${item.region}</span>
-                            <span class="card-size">${item.size}</span>
+                            <span>${item.id.substring(0,4)}</span>
+                            <span style="color:var(--accent)">${item.size}</span>
                         </div>
                     </div>
-                `;
-                card.onclick = () => openModal(item);
-                grid.appendChild(card);
-            });
+                </div>
+            `).join('');
         }
 
-        // NAVIGATION
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const section = item.dataset.section;
-                
-                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-                item.classList.add('active');
-                
-                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-                document.getElementById(section).classList.add('active');
-            });
-        });
-
-        // SEARCH
+        // --- RECHERCHE ---
         document.getElementById('searchInput').addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            const filtered = gamesData.filter(game => 
-                game.name.toLowerCase().includes(query)
-            );
-            renderItems(filtered, 'gamesGrid');
+            const term = e.target.value.toLowerCase();
+            const filtered = allGames.filter(g => g.name.toLowerCase().includes(term) || g.id.toLowerCase().includes(term));
+            render(filtered);
         });
 
-        // MODAL WITH GALLERY
-        let currentItem = null;
-
-        function openModal(item) {
-            currentItem = item;
-            document.getElementById('modalTitle').textContent = item.name;
-            document.getElementById('modalSize').textContent = item.size;
-            document.getElementById('modalVersion').textContent = item.version;
-            document.getElementById('modalRegion').textContent = item.region;
-            document.getElementById('modalFormat').textContent = item.format;
-            document.getElementById('modalDesc').textContent = item.desc;
-            
-            // Set first screenshot as main
-            const galleryMain = document.getElementById('galleryMain');
-            galleryMain.style.backgroundImage = `url('${item.screenshots[0]}')`;
-            
-            // Create thumbnails
-            const thumbsContainer = document.getElementById('galleryThumbs');
-            thumbsContainer.innerHTML = '';
-            item.screenshots.forEach((img, index) => {
-                const thumb = document.createElement('div');
-                thumb.className = 'thumb' + (index === 0 ? ' active' : '');
-                thumb.style.backgroundImage = `url('${img}')`;
-                thumb.onclick = () => {
-                    galleryMain.style.backgroundImage = `url('${img}')`;
-                    document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
-                    thumb.classList.add('active');
-                };
-                thumbsContainer.appendChild(thumb);
-            });
-            
+        // --- MODALE ---
+        function openModal(id) {
+            currentItem = allGames.find(g => g.id === id);
+            document.getElementById('modalTitle').textContent = currentItem.name;
+            document.getElementById('modalSize').textContent = currentItem.size;
+            document.getElementById('modalID').textContent = currentItem.id;
+            document.getElementById('modalDesc').textContent = "Lien direct vers le serveur PKG. Prêt pour installation via Remote PKG Installer ou copie USB.";
+            document.getElementById('modalImg').style.backgroundImage = `url('${currentItem.cover}')`;
             document.getElementById('modalOverlay').classList.add('active');
         }
 
@@ -1273,22 +194,10 @@
         }
 
         function downloadPkg() {
-            alert(`📦 Téléchargement de ${currentItem.name} en cours...\n\nTaille: ${currentItem.size}\nVersion: ${currentItem.version}\n\nLe fichier PKG sera disponible dans vos téléchargements PS4.`);
+            if(currentItem) window.open(currentItem.url, '_blank');
         }
 
-        // Close on overlay click
-        document.getElementById('modalOverlay').addEventListener('click', (e) => {
-            if (e.target.id === 'modalOverlay') {
-                closeModal();
-            }
-        });
-
-        // INIT
-        renderItems(gamesData, 'gamesGrid');
-        renderItems(appsData, 'appsGrid');
-        renderItems(themesData, 'themesGrid');
-        renderItems(dlcData, 'dlcGrid');
+        window.onload = initStore;
     </script>
-
-
-</body></html>
+</body>
+</html>
