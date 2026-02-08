@@ -117,8 +117,11 @@
 </div>
 
 <script>
+    // ============================================
+    // BASE DE DONNÉES DES APPS/OUTILS/THÈMES
+    // ============================================
+    // IMPORTANT : Copiez-collez les nouveaux objets générés par le CMS ici
     const apps = [
-        // APPLICATIONS
         {
             name: "Apollo Save Tool",
             category: "apps",
@@ -158,179 +161,6 @@
             requirements: "GoldHEN 2.0 ou supérieur"
         },
         {
-            name: "Homebrew Store",
-            category: "apps",
-            version: "v3.2",
-            size: "12 MB",
-            icon: "🏪",
-            color: "#2196F3",
-            description: "Le magasin d'applications homebrew officiel pour PS4. Téléchargez et installez facilement des centaines d'apps, émulateurs et outils directement depuis votre console sans PC.",
-            features: [
-                "Catalogue de 250+ homebrews",
-                "Installation en un clic depuis la PS4",
-                "Mises à jour automatiques des apps",
-                "Interface moderne et intuitive",
-                "Recherche et filtres par catégorie",
-                "Classement par popularité et nouveautés"
-            ],
-            download: "https://github.com/LightningMods/PS4-Store/releases/download/v3.2.0/LAPY20001-v3.2.0.pkg",
-            requirements: "Connexion Internet requise, GoldHEN 2.0+"
-        },
-        {
-            name: "RetroArch PS4",
-            category: "apps",
-            version: "v1.17.0",
-            size: "45 MB",
-            icon: "🕹️",
-            color: "#F44336",
-            description: "L'émulateur multi-systèmes le plus puissant pour PS4. Jouez à des milliers de jeux rétro de plus de 50 consoles : NES, SNES, Genesis, PlayStation 1, N64, Arcade et bien plus.",
-            features: [
-                "Support de 50+ systèmes (NES, SNES, PS1, N64, etc.)",
-                "Netplay multijoueur en ligne",
-                "Shaders HD et filtres CRT authentiques",
-                "Save states (sauvegardes instantanées)",
-                "Rembobinage en jeu",
-                "Interface XMB style PS3"
-            ],
-            download: "https://buildbot.libretro.com/stable/1.17.0/playstation/ps4/RetroArch_rpx.pkg",
-            requirements: "PS4 firmware 9.00 ou supérieur"
-        },
-        {
-            name: "ItemzFlow",
-            category: "apps",
-            version: "v1.3",
-            size: "18 MB",
-            icon: "📦",
-            color: "#00BCD4",
-            description: "Gestionnaire de jeux et apps avec interface moderne. Organisez votre bibliothèque, téléchargez automatiquement les covers, installez des PKG via NFS et gérez vos backups facilement.",
-            features: [
-                "Bibliothèque de jeux avec covers automatiques",
-                "Installation PKG via FTP/NFS/USB",
-                "Gestion des mises à jour et DLC",
-                "Dump de jeux installés",
-                "Interface personnalisable",
-                "Support des trainers (cheats)"
-            ],
-            download: "https://github.com/LightningMods/Itemzflow/releases/download/v1.30/ITEM00001.pkg",
-            requirements: "GoldHEN, connexion réseau pour covers"
-        },
-        {
-            name: "PS4 Media Player",
-            category: "apps",
-            version: "v1.0.5",
-            size: "10 MB",
-            icon: "🎬",
-            color: "#E91E63",
-            description: "Lecteur multimédia complet pour PS4. Lisez vos films, séries, musique et photos depuis USB, disque dur ou streaming réseau. Support de tous les formats populaires.",
-            features: [
-                "Support MP4, MKV, AVI, MOV, FLV",
-                "Lecture depuis USB/HDD/SMB/NFS",
-                "Sous-titres SRT, ASS, SUB avec sync",
-                "Codec audio HD (AC3, DTS, FLAC)",
-                "Playlists et reprise de lecture",
-                "Contrôle tactile DualShock 4"
-            ],
-            download: "https://github.com/Storm21CH/PS4-MediaPlayer/releases/download/1.0.5/PS4-MediaPlayer.pkg",
-            requirements: "PS4 firmware 9.00 ou supérieur"
-        },
-        {
-            name: "PS4 Browser",
-            category: "apps",
-            version: "v2.1",
-            size: "6 MB",
-            icon: "🌐",
-            color: "#3F51B5",
-            description: "Navigateur web complet pour PS4 avec support HTML5, JavaScript et CSS3. Accédez à vos sites préférés, streaming vidéo, réseaux sociaux directement depuis votre console.",
-            features: [
-                "Navigateur web HTML5 complet",
-                "Support JavaScript et CSS3",
-                "Lecture vidéo en streaming",
-                "Téléchargement de fichiers",
-                "Gestion des favoris",
-                "Mode plein écran"
-            ],
-            download: "https://raw.githubusercontent.com/PS4-Browser/PS4-Browser/main/PS4-Browser.pkg",
-            requirements: "Connexion Internet requise"
-        },
-        {
-            name: "Handy Store",
-            category: "apps",
-            version: "v1.5",
-            size: "8 MB",
-            icon: "🛒",
-            color: "#009688",
-            description: "Alternative au Homebrew Store avec interface simplifiée. Accédez à une collection curatée d'apps, outils et émulateurs avec installation one-click.",
-            features: [
-                "Interface minimaliste et rapide",
-                "Collection curatée d'apps qualité",
-                "Installation ultra-rapide",
-                "Pas de publicités",
-                "Mises à jour hebdomadaires",
-                "Recherche intelligente"
-            ],
-            download: "https://raw.githubusercontent.com/Store-Homebrew/HandyStore-PS4/main/HandyStore.pkg",
-            requirements: "GoldHEN 2.0+, connexion Internet"
-        },
-        {
-            name: "WizWiki",
-            category: "apps",
-            version: "v1.2",
-            size: "5 MB",
-            icon: "📚",
-            color: "#795548",
-            description: "Wikipédia hors-ligne pour PS4. Consultez des millions d'articles encyclopédiques directement sur votre console, parfait pour l'apprentissage et la recherche.",
-            features: [
-                "Accès à Wikipédia complet",
-                "Recherche instantanée",
-                "Articles en français et anglais",
-                "Mode lecture optimisé",
-                "Historique de navigation",
-                "Ajout de favoris"
-            ],
-            download: "https://raw.githubusercontent.com/PS4-Wiki/WizWiki/main/WizWiki.pkg",
-            requirements: "Connexion Internet pour premier téléchargement"
-        },
-        {
-            name: "PS4 VLC Player",
-            category: "apps",
-            version: "v3.0",
-            size: "25 MB",
-            icon: "🎥",
-            color: "#FF9800",
-            description: "Port du célèbre VLC Media Player sur PS4. Lecteur multimédia universel avec support de tous les codecs vidéo et audio existants.",
-            features: [
-                "Support de TOUS les formats",
-                "Streaming réseau (HTTP, FTP, SMB)",
-                "Lecture Blu-ray et DVD",
-                "Equalizer audio 10 bandes",
-                "Contrôles avancés de lecture",
-                "Playlist et chapitres"
-            ],
-            download: "https://raw.githubusercontent.com/VideoLAN/vlc-ps4/main/VLC-PS4.pkg",
-            requirements: "PS4 firmware 9.00+"
-        },
-
-        // OUTILS
-        {
-            name: "PS4 Xplorer",
-            category: "tools",
-            version: "v2.0.6",
-            size: "8 MB",
-            icon: "📁",
-            color: "#FF9800",
-            description: "Explorateur de fichiers le plus avancé pour PS4. Naviguez dans tous les répertoires système, gérez vos fichiers, installez des PKG et accédez aux partitions USB.",
-            features: [
-                "Explorateur de fichiers complet avec accès root",
-                "Copier/Coller/Supprimer/Renommer",
-                "Installateur de PKG intégré",
-                "Lecteur d'images (PNG, JPG, DDS)",
-                "Éditeur de texte avec support SFO",
-                "Accès USB instantané"
-            ],
-            download: "https://github.com/Al-Azif/ps4-exploit-host/releases/download/0.4.7/PS4-Xplorer.pkg",
-            requirements: "PS4 firmware 5.05 - 11.00"
-        },
-        {
             name: "Orbis Toolbox",
             category: "tools",
             version: "v1.1.0",
@@ -350,44 +180,6 @@
             requirements: "GoldHEN 2.4 ou supérieur"
         },
         {
-            name: "FTP Server",
-            category: "tools",
-            version: "v1.4",
-            size: "1 MB",
-            icon: "📡",
-            color: "#607D8B",
-            description: "Serveur FTP ultra-rapide pour PS4. Transférez des fichiers entre votre PC et votre PS4 via Wi-Fi ou Ethernet. Simple, stable et jusqu'à 50 MB/s en filaire.",
-            features: [
-                "Transfert de fichiers PC ↔ PS4",
-                "Support FTP et FTPS (sécurisé)",
-                "Vitesse jusqu'à 50 MB/s",
-                "Accès complet au système",
-                "Multi-connexions simultanées",
-                "Compatible tous clients FTP"
-            ],
-            download: "https://github.com/hippie68/ftps4/releases/download/v1.4/ftps4.pkg",
-            requirements: "Connexion réseau locale"
-        },
-        {
-            name: "Package Manager",
-            category: "tools",
-            version: "v1.2.1",
-            size: "4 MB",
-            icon: "📦",
-            color: "#795548",
-            description: "Gestionnaire de packages PKG professionnel. Installez, désinstallez et gérez tous vos PKG, DLC et patches avec vérification d'intégrité.",
-            features: [
-                "Installation PKG simplifiée",
-                "Gestion des DLC et patches",
-                "Backup automatique",
-                "Informations détaillées PKG",
-                "Installation par lot",
-                "Vérification d'intégrité MD5"
-            ],
-            download: "https://raw.githubusercontent.com/PKG-Manager/PS4-PKG-Manager/main/PKG-Manager.pkg",
-            requirements: "Espace disque libre suffisant"
-        },
-        {
             name: "WebMAN MOD",
             category: "tools",
             version: "v1.47.45",
@@ -405,309 +197,19 @@
             ],
             download: "https://github.com/aldostools/webMAN-MOD/releases/download/1.47.45/webMAN_MOD_1.47.45_Installer.pkg",
             requirements: "GoldHEN ou HEN"
-        },
-        {
-            name: "PS4 Temperature Control",
-            category: "tools",
-            version: "v1.0",
-            size: "2 MB",
-            icon: "🌡️",
-            color: "#FF5722",
-            description: "Contrôlez la température de votre PS4 en temps réel. Ajustez la vitesse du ventilateur, surveillez la température et évitez la surchauffe avec des profils personnalisés.",
-            features: [
-                "Monitoring température en temps réel",
-                "Courbe de ventilateur personnalisée",
-                "Alertes de surchauffe",
-                "Profils par jeu",
-                "Statistiques historiques",
-                "Mode silencieux et performance"
-            ],
-            download: "https://raw.githubusercontent.com/PS4-TempControl/PS4-Temperature-Control/main/TempControl.pkg",
-            requirements: "GoldHEN 2.3+"
-        },
-        {
-            name: "Samba Server",
-            category: "tools",
-            version: "v2.0",
-            size: "3 MB",
-            icon: "💾",
-            color: "#4CAF50",
-            description: "Serveur SMB/Samba pour PS4. Partagez vos fichiers PS4 sur votre réseau local comme un disque réseau Windows. Accédez à vos jeux depuis n'importe quel PC.",
-            features: [
-                "Serveur SMB/CIFS complet",
-                "Montage comme lecteur réseau",
-                "Vitesse de transfert élevée",
-                "Compatible Windows/Mac/Linux",
-                "Configuration simple",
-                "Accès multi-utilisateurs"
-            ],
-            download: "https://raw.githubusercontent.com/SMB-PS4/Samba-Server/main/Samba-Server.pkg",
-            requirements: "Connexion réseau locale"
-        },
-        {
-            name: "PS4 Backup Tool",
-            category: "tools",
-            version: "v1.5",
-            size: "6 MB",
-            icon: "💿",
-            color: "#00BCD4",
-            description: "Sauvegardez et restaurez vos jeux, saves, thèmes et apps PS4. Créez des backups automatiques sur USB ou disque dur externe pour protéger vos données.",
-            features: [
-                "Backup complet ou sélectif",
-                "Restauration rapide",
-                "Compression automatique",
-                "Planification de backups",
-                "Vérification d'intégrité",
-                "Support USB 3.0"
-            ],
-            download: "https://raw.githubusercontent.com/PS4-Backup/Backup-Tool/main/BackupTool.pkg",
-            requirements: "USB ou disque externe"
-        },
-        {
-            name: "GoldHEN Settings",
-            category: "tools",
-            version: "v2.4",
-            size: "4 MB",
-            icon: "⚙️",
-            color: "#FFC107",
-            description: "Interface graphique complète pour configurer GoldHEN. Activez/désactivez les plugins, cheats, debug settings avec une interface moderne et intuitive.",
-            features: [
-                "Configuration GoldHEN complète",
-                "Gestion des plugins",
-                "Activation cheats par jeu",
-                "Debug settings",
-                "Profils personnalisés",
-                "Sauvegarde de configurations"
-            ],
-            download: "https://raw.githubusercontent.com/GoldHEN/GoldHEN_Settings/main/GoldHEN-Settings.pkg",
-            requirements: "GoldHEN 2.0 ou supérieur"
-        },
-        {
-            name: "PS4 Debug Tty",
-            category: "tools",
-            version: "v1.1",
-            size: "2 MB",
-            icon: "🐛",
-            color: "#9E9E9E",
-            description: "Outil de debugging professionnel pour développeurs. Affichez les logs système, erreurs kernel et messages de debug en temps réel.",
-            features: [
-                "Affichage logs système en temps réel",
-                "Capture erreurs kernel",
-                "Export des logs",
-                "Filtres personnalisés",
-                "Mode verbose",
-                "Compatible tous firmwares"
-            ],
-            download: "https://raw.githubusercontent.com/PS4-Debug/Debug-Tty/main/DebugTty.pkg",
-            requirements: "Pour développeurs uniquement"
-        },
-
-        // THÈMES
-        {
-            name: "God of War Theme",
-            category: "themes",
-            version: "v1.0",
-            size: "12 MB",
-            icon: "⚔️",
-            color: "#8B0000",
-            description: "Thème officiel God of War pour PS4. Plongez dans l'univers nordique avec Kratos et Atreus. Fond d'écran dynamique 4K, icônes personnalisées et musique épique.",
-            features: [
-                "Design God of War authentique",
-                "Fond d'écran animé 4K",
-                "Icônes personnalisées nordiques",
-                "Musique épique de Bear McCreary",
-                "Sons système thématiques",
-                "Compatible tous firmwares"
-            ],
-            download: "https://raw.githubusercontent.com/PS4-Themes/God-of-War/main/GodOfWar-Theme.pkg",
-            requirements: "Installation via Package Installer puis Paramètres > Thèmes"
-        },
-        {
-            name: "Ghost of Tsushima Theme",
-            category: "themes",
-            version: "v1.0",
-            size: "15 MB",
-            icon: "🗾",
-            color: "#C41E3A",
-            description: "Thème Ghost of Tsushima avec ambiance samouraï. Paysages japonais magnifiques, feuilles de pampa qui dansent et musique traditionnelle japonaise.",
-            features: [
-                "Design japonais authentique",
-                "Animation feuilles de pampa",
-                "Fond 4K de l'île de Tsushima",
-                "Musique traditionnelle japonaise",
-                "Icônes style encre japonaise",
-                "Effets visuels zen"
-            ],
-            download: "https://raw.githubusercontent.com/PS4-Themes/Ghost-of-Tsushima/main/GoT-Theme.pkg",
-            requirements: "Installation via Package Installer puis Paramètres > Thèmes"
-        },
-        {
-            name: "Elden Ring Theme",
-            category: "themes",
-            version: "v1.0",
-            size: "18 MB",
-            icon: "💍",
-            color: "#DAA520",
-            description: "Thème Elden Ring dark fantasy. L'Arbre-Monde doré, les Terres Intermédiaires brumeuses et la musique majestueuse de FromSoftware pour une ambiance épique.",
-            features: [
-                "Design Elden Ring sombre et doré",
-                "Fond d'écran Arbre-Monde animé",
-                "Effets de brume mystique",
-                "Musique orchestrale épique",
-                "Icônes style ruines anciennes",
-                "Animations de flammes"
-            ],
-            download: "https://raw.githubusercontent.com/PS4-Themes/Elden-Ring/main/EldenRing-Theme.pkg",
-            requirements: "Installation via Package Installer puis Paramètres > Thèmes"
-        },
-        {
-            name: "Spider-Man Theme",
-            category: "themes",
-            version: "v1.0",
-            size: "10 MB",
-            icon: "🕷️",
-            color: "#DC143C",
-            description: "Thème Spider-Man Marvel officiel. New York City la nuit, toiles d'araignée, costume rouge et bleu iconique avec musique héroïque dynamique.",
-            features: [
-                "Design Spider-Man Marvel",
-                "Fond NYC skyline animé",
-                "Effets toiles d'araignée",
-                "Musique héroïque dynamique",
-                "Icônes super-héros",
-                "Animation de web-swinging"
-            ],
-            download: "https://raw.githubusercontent.com/PS4-Themes/Spider-Man/main/SpiderMan-Theme.pkg",
-            requirements: "Installation via Package Installer puis Paramètres > Thèmes"
-        },
-        {
-            name: "Bloodborne Theme",
-            category: "themes",
-            version: "v1.0",
-            size: "14 MB",
-            icon: "🩸",
-            color: "#4B0000",
-            description: "Thème Bloodborne gothique horrifique. Yharnam la sombre, lune rouge sang, atmosphère victorienne macabre et musique inquiétante de FromSoftware.",
-            features: [
-                "Design Bloodborne gothique",
-                "Fond Yharnam brumeux animé",
-                "Lune rouge sang pulsante",
-                "Musique horrifique atmosphérique",
-                "Icônes style victorien sombre",
-                "Effets de sang et ombres"
-            ],
-            download: "https://raw.githubusercontent.com/PS4-Themes/Bloodborne/main/Bloodborne-Theme.pkg",
-            requirements: "Installation via Package Installer puis Paramètres > Thèmes"
-        },
-        {
-            name: "Horizon Zero Dawn Theme",
-            category: "themes",
-            version: "v1.0",
-            size: "16 MB",
-            icon: "🏹",
-            color: "#FF6B35",
-            description: "Thème Horizon Zero Dawn post-apocalyptique. Nature sauvage reprise ses droits, machines dinosaures et coucher de soleil orangé sur les ruines de l'ancien monde.",
-            features: [
-                "Design post-apocalyptique naturel",
-                "Fond crépuscule animé",
-                "Silhouettes de machines",
-                "Musique tribale futuriste",
-                "Icônes style Nora",
-                "Effets de lumière dorée"
-            ],
-            download: "https://raw.githubusercontent.com/PS4-Themes/Horizon-Zero-Dawn/main/HZD-Theme.pkg",
-            requirements: "Installation via Package Installer puis Paramètres > Thèmes"
-        },
-        {
-            name: "The Last of Us Theme",
-            category: "themes",
-            version: "v1.0",
-            size: "11 MB",
-            icon: "🍄",
-            color: "#556B2F",
-            description: "Thème The Last of Us survival. Nature post-pandémie, champignons Cordyceps, ambiance désolée et musique mélancolique de Gustavo Santaolalla.",
-            features: [
-                "Design post-apocalyptique végétal",
-                "Fond ville abandonnée envahie",
-                "Effets de spores Cordyceps",
-                "Musique acoustique mélancolique",
-                "Icônes style survie",
-                "Ambiance désolée et poétique"
-            ],
-            download: "https://raw.githubusercontent.com/PS4-Themes/The-Last-of-Us/main/TLOU-Theme.pkg",
-            requirements: "Installation via Package Installer puis Paramètres > Thèmes"
-        },
-        {
-            name: "Cyberpunk 2077 Theme",
-            category: "themes",
-            version: "v1.0",
-            size: "20 MB",
-            icon: "💠",
-            color: "#FFD700",
-            description: "Thème Cyberpunk 2077 avec néons de Night City. Esthétique cyberpunk futuriste, effets glitch, hologrammes et musique synthwave électrisante.",
-            features: [
-                "Design Cyberpunk 2077 néons",
-                "Fond Night City animé 4K",
-                "Effets glitch et hologrammes",
-                "Musique synthwave électro",
-                "Icônes style cyberpunk",
-                "Animations de publicités néon"
-            ],
-            download: "https://raw.githubusercontent.com/PS4-Themes/Cyberpunk-2077/main/Cyberpunk-Theme.pkg",
-            requirements: "Installation via Package Installer puis Paramètres > Thèmes"
-        },
-        {
-            name: "Final Fantasy VII Theme",
-            category: "themes",
-            version: "v1.0",
-            size: "13 MB",
-            icon: "⚡",
-            color: "#4169E1",
-            description: "Thème Final Fantasy VII Remake. Midgar cyberpunk fantasy, réacteur Mako, épées gigantesques et musique orchestrale épique de Nobuo Uematsu remasterisée.",
-            features: [
-                "Design FF7 Remake modernisé",
-                "Fond Midgar illuminé animé",
-                "Effets d'énergie Mako",
-                "OST remasterisée orchestrale",
-                "Icônes style materia",
-                "Animations d'invocations"
-            ],
-            download: "https://raw.githubusercontent.com/PS4-Themes/Final-Fantasy-VII/main/FF7-Theme.pkg",
-            requirements: "Installation via Package Installer puis Paramètres > Thèmes"
-        },
-        {
-            name: "Dark Souls III Theme",
-            category: "themes",
-            version: "v1.0",
-            size: "17 MB",
-            icon: "🌙",
-            color: "#2F4F4F",
-            description: "Thème Dark Souls III médiéval sombre. Lothric en ruines, feux de camp, âmes flottantes et musique orchestrale mélancolique et épique de FromSoftware.",
-            features: [
-                "Design Dark Souls médiéval",
-                "Fond Lothric ruiné animé",
-                "Effets de feu de camp",
-                "Musique orchestrale épique",
-                "Icônes style âmes",
-                "Animations de flammes sacrées"
-            ],
-            download: "https://raw.githubusercontent.com/PS4-Themes/Dark-Souls-III/main/DS3-Theme.pkg",
-            requirements: "Installation via Package Installer puis Paramètres > Thèmes"
         }
+        // AJOUTEZ VOS NOUVEAUX ITEMS ICI via le CMS
     ];
 
     let filteredApps = [...apps];
     let currentFilter = 'all';
     let currentApp = null;
 
-    // Fonction pour corriger automatiquement les liens GitHub
     function fixGitHubLink(url) {
         if (!url) return url;
-        
-        // Si c'est un lien blob, le convertir en raw
         if (url.includes('github.com') && url.includes('/blob/')) {
             return url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
         }
-        
         return url;
     }
 
@@ -812,18 +314,13 @@
             downloadBtn.innerHTML = '📥 TÉLÉCHARGER PKG';
         }
         
-        // Configuration du téléchargement forcé
         downloadBtn.onclick = function(e) {
             e.preventDefault();
-            
             const correctedUrl = fixGitHubLink(currentApp.download);
-            
-            // Créer un lien temporaire pour forcer le téléchargement
             const link = document.createElement('a');
             link.href = correctedUrl;
             link.download = currentApp.name.replace(/\s+/g, '-') + '.pkg';
             link.target = '_blank';
-            
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
