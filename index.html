@@ -1,148 +1,436 @@
 <!DOCTYPE html>
+
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXA DIGITAL STORE</title>
+    <title>NEXA STORE - PS4 Homebrew</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root { --ps5-blue: #0070cc; --ps5-white: #ffffff; --ps5-black: #000000; --accent: #00d4ff; }
+        :root { --ps5-blue: #0070cc; --ps5-white: #ffffff; --accent: #00d4ff; }
         body { background: radial-gradient(circle at top right, #1a1a2e, #0a0a0a); color: var(--ps5-white); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; overflow-x: hidden; }
-        
-        /* HEADER */
-        header { background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-        .logo { font-size: 24px; font-weight: 900; background: linear-gradient(to right, #0070cc, #00d4ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 2px; }
-        .search-box { flex: 1; max-width: 600px; margin: 0 40px; }
-        .search-box input { width: 100%; padding: 12px 25px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50px; color: white; outline: none; transition: 0.3s; }
-        .search-box input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(0, 212, 255, 0.4); }
 
-        /* GRID */
-        .container { padding: 30px; max-width: 1600px; margin: 0 auto; }
-        #status-msg { text-align: center; padding: 50px; font-weight: bold; color: var(--accent); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 25px; }
-        
-        /* CARDS */
-        .card { background: rgba(255, 255, 255, 0.05); border-radius: 15px; overflow: hidden; transition: 0.4s; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; }
-        .card:hover { transform: translateY(-10px); border-color: var(--accent); background: rgba(255, 255, 255, 0.1); }
-        .card-cover { width: 100%; aspect-ratio: 3/4; background-size: cover; background-position: center; background-color: #111; position: relative; }
-        .badge { position: absolute; top: 10px; right: 10px; background: var(--ps5-blue); padding: 4px 10px; border-radius: 5px; font-size: 10px; font-weight: bold; }
-        .card-info { padding: 15px; }
-        .card-title { font-size: 14px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .card-size { font-size: 12px; color: var(--accent); margin-top: 5px; }
+```
+    /* HEADER */
+    header { background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 15px; }
+    .logo { font-size: 24px; font-weight: 900; background: linear-gradient(to right, #0070cc, #00d4ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 2px; }
+    .search-box { flex: 1; max-width: 600px; }
+    .search-box input { width: 100%; padding: 12px 25px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50px; color: white; outline: none; transition: 0.3s; }
+    .search-box input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(0, 212, 255, 0.4); }
+    .version { font-size: 12px; opacity: 0.6; background: rgba(255, 255, 255, 0.1); padding: 5px 12px; border-radius: 15px; }
 
-        /* MODAL */
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        .modal-overlay.active { display: flex; }
-        .modal { background: #1a1a1a; width: 90%; max-width: 850px; border-radius: 20px; display: flex; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
-        .modal-left { flex: 1; background-size: cover; background-position: center; min-height: 450px; }
-        .modal-right { flex: 1.2; padding: 40px; display: flex; flex-direction: column; }
-        .btn-dl { background: var(--ps5-blue); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: auto; font-size: 16px; }
-        .btn-dl:hover { background: #0084ff; }
-    </style>
+    /* TABS */
+    .tabs { display: flex; gap: 10px; padding: 20px 40px; flex-wrap: wrap; }
+    .tab { padding: 10px 20px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; cursor: pointer; transition: 0.3s; }
+    .tab.active { background: var(--ps5-blue); border-color: var(--accent); }
+    .tab:hover { border-color: var(--accent); }
+
+    /* GRID */
+    .container { padding: 30px; max-width: 1600px; margin: 0 auto; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 25px; }
+    
+    /* CARDS */
+    .card { background: rgba(255, 255, 255, 0.05); border-radius: 15px; overflow: hidden; transition: 0.4s; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; }
+    .card:hover { transform: translateY(-10px); border-color: var(--accent); background: rgba(255, 255, 255, 0.1); box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3); }
+    .card-cover { width: 100%; aspect-ratio: 16/9; background-size: contain; background-position: center; background-repeat: no-repeat; background-color: #1a1a2e; position: relative; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .badge { position: absolute; top: 10px; right: 10px; background: var(--ps5-blue); padding: 4px 10px; border-radius: 5px; font-size: 10px; font-weight: bold; }
+    .card-info { padding: 15px; }
+    .card-title { font-size: 14px; font-weight: bold; margin-bottom: 5px; }
+    .card-desc { font-size: 11px; color: rgba(255, 255, 255, 0.6); line-height: 1.4; }
+
+    /* MODAL */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(10px); padding: 20px; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: #1a1a1a; width: 100%; max-width: 900px; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); max-height: 90vh; display: flex; flex-direction: column; }
+    .modal-header { padding: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .modal-header h2 { font-size: 28px; margin-bottom: 10px; }
+    .modal-header .meta { display: flex; gap: 15px; font-size: 13px; opacity: 0.7; flex-wrap: wrap; }
+    .modal-body { padding: 30px; overflow-y: auto; flex: 1; }
+    .modal-body h3 { color: var(--accent); margin-bottom: 15px; font-size: 18px; }
+    .modal-body p { line-height: 1.8; margin-bottom: 20px; opacity: 0.9; }
+    .modal-body ul { margin-left: 20px; line-height: 2; opacity: 0.9; }
+    .modal-footer { padding: 20px 30px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 10px; }
+    .btn { padding: 15px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; border: none; font-size: 14px; flex: 1; text-align: center; text-decoration: none; display: block; }
+    .btn-primary { background: var(--ps5-blue); color: white; }
+    .btn-primary:hover { background: #0084ff; transform: scale(1.02); }
+    .btn-secondary { background: #333; color: white; }
+    .btn-secondary:hover { background: #444; }
+
+    @media (max-width: 768px) {
+        header, .tabs { padding: 15px; }
+        .logo { font-size: 18px; }
+        .modal-footer { flex-direction: column; }
+    }
+</style>
+```
+
 </head>
 <body>
 
 <header>
-    <div class="logo">NEXA STORE</div>
+    <div class="logo">🛠️ NEXA STORE</div>
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Rechercher parmi 6000+ jeux...">
+        <input type="text" id="searchInput" placeholder="Rechercher des apps, thèmes, outils...">
     </div>
-    <div id="count" style="font-size: 12px; opacity: 0.6;">0 JEUX</div>
+    <div style="display: flex; gap: 15px; align-items: center;">
+        <div id="count" style="font-size: 12px; opacity: 0.6;">0 APPS</div>
+        <div class="version">V1.0</div>
+    </div>
 </header>
 
+<div class="tabs">
+    <div class="tab active" onclick="filterCategory('all')">Tous</div>
+    <div class="tab" onclick="filterCategory('apps')">📱 Applications</div>
+    <div class="tab" onclick="filterCategory('tools')">🔧 Outils</div>
+    <div class="tab" onclick="filterCategory('themes')">🎨 Thèmes</div>
+</div>
+
 <div class="container">
-    <div id="status-msg">📡 Initialisation de la connexion...</div>
     <div class="grid" id="mainGrid"></div>
 </div>
 
 <div class="modal-overlay" id="modalOverlay" onclick="if(event.target==this)closeModal()">
     <div class="modal">
-        <div class="modal-left" id="modalImg"></div>
-        <div class="modal-right">
-            <h2 id="modalTitle" style="margin-bottom: 15px;"></h2>
-            <p id="modalID" style="color: var(--accent); margin-bottom: 10px;"></p>
-            <p id="modalRegion" style="opacity: 0.7; margin-bottom: 5px;"></p>
-            <p id="modalSize" style="font-weight: bold;"></p>
-            <button class="btn-dl" onclick="download()">TÉLÉCHARGER PKG</button>
+        <div class="modal-header">
+            <h2 id="modalTitle"></h2>
+            <div class="meta">
+                <span id="modalCategory"></span>
+                <span id="modalVersion"></span>
+                <span id="modalSize"></span>
+            </div>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+        <div class="modal-footer">
+            <a id="modalDownload" href="#" class="btn btn-primary" target="_blank">📥 TÉLÉCHARGER PKG</a>
+            <button class="btn btn-secondary" onclick="closeModal()">FERMER</button>
         </div>
     </div>
 </div>
 
 <script>
-    // Configuration de la base de données via un proxy robuste
-    const RAW_URL = "https://raw.githubusercontent.com/huggingfacer04/ps4-games-database/main/data/games.json";
-    const PROXY = "https://api.allorigins.win/raw?url=";
-    
-    let db = [];
-    let selectedGame = null;
-
-    async function fetchData() {
-        const status = document.getElementById('status-msg');
-        try {
-            // Tentative de récupération
-            const response = await fetch(PROXY + encodeURIComponent(RAW_URL));
-            if (!response.ok) throw new Error("Réponse réseau non OK");
-            
-            db = await response.json();
-            status.style.display = 'none';
-            document.getElementById('count').innerText = `${db.length} JEUX DISPONIBLES`;
-            render(db);
-        } catch (err) {
-            status.innerHTML = "❌ Erreur de connexion. Veuillez rafraîchir la page ou vérifier votre connexion internet.";
-            status.style.color = "#ff4444";
-            console.error(err);
+    const apps = [
+        {
+            name: "Apollo Save Tool",
+            category: "apps",
+            version: "v1.8.0",
+            size: "15 MB",
+            icon: "🎮",
+            color: "#4CAF50",
+            description: "Apollo Save Tool est le gestionnaire de sauvegardes le plus complet pour PS4. Il permet de télécharger, déverrouiller, patcher et resigner des fichiers de sauvegarde directement sur votre console.",
+            features: [
+                "Gestion complète des sauvegardes PS4",
+                "Support Save Wizard et Bruteforce Save Data",
+                "Activation de compte hors ligne",
+                "Récupération du code parental perdu",
+                "Import/Export de sauvegardes via USB",
+                "Base de données en ligne avec 1000+ saves"
+            ],
+            download: "https://github.com/bucanero/apollo-ps4/releases/latest/download/apollo-ps4.pkg",
+            requirements: "PS4 jailbreakée avec GoldHEN ou ps4debug"
+        },
+        {
+            name: "PS4 Xplorer",
+            category: "tools",
+            version: "v2.0.6",
+            size: "8 MB",
+            icon: "📁",
+            color: "#FF9800",
+            description: "Explorateur de fichiers le plus avancé pour PS4. Naviguez dans tous les répertoires système, gérez vos fichiers, installez des PKG et accédez aux partitions USB avec une interface intuitive.",
+            features: [
+                "Explorateur de fichiers complet avec accès root",
+                "Copier/Coller/Supprimer/Renommer fichiers et dossiers",
+                "Installateur de PKG intégré",
+                "Lecteur d'images (PNG, JPG, DDS)",
+                "Éditeur de texte avec support SFO",
+                "Accès USB instantané (touche gauche du D-PAD)"
+            ],
+            download: "https://pkg-zone.com/download/LAPY20009",
+            requirements: "PS4 firmware 5.05 - 11.00, GoldHEN recommandé"
+        },
+        {
+            name: "Homebrew Store",
+            category: "apps",
+            version: "v3.2",
+            size: "12 MB",
+            icon: "🏪",
+            color: "#2196F3",
+            description: "Le magasin d'applications homebrew officiel pour PS4. Téléchargez et installez facilement des centaines d'apps, émulateurs et outils directement depuis votre console sans PC.",
+            features: [
+                "Catalogue de 250+ homebrews",
+                "Installation en un clic depuis la PS4",
+                "Mises à jour automatiques des apps",
+                "Interface moderne et intuitive",
+                "Recherche et filtres par catégorie",
+                "Classement par popularité et nouveautés"
+            ],
+            download: "https://pkg-zone.com/download/LAPY20001",
+            requirements: "Connexion Internet requise, GoldHEN 2.0+"
+        },
+        {
+            name: "Orbis Toolbox",
+            category: "tools",
+            version: "v1.1.0",
+            size: "5 MB",
+            icon: "🔨",
+            color: "#9C27B0",
+            description: "Suite d'outils système professionnels pour PS4. Monitoring en temps réel, debugging, gestion mémoire et optimisation des performances avec interface overlay.",
+            features: [
+                "Monitoring température CPU/GPU en temps réel",
+                "Overlay FPS dans tous les jeux",
+                "Gestion et nettoyage mémoire RAM",
+                "Debug tools pour développeurs",
+                "Contrôle manuel de la vitesse du ventilateur",
+                "Informations système détaillées"
+            ],
+            download: "https://github.com/OSM-Made/Orbis-Toolbox/releases/latest/download/Orbis-Toolbox.pkg",
+            requirements: "GoldHEN 2.4 ou supérieur"
+        },
+        {
+            name: "RetroArch PS4",
+            category: "apps",
+            version: "v1.17.0",
+            size: "45 MB",
+            icon: "🕹️",
+            color: "#F44336",
+            description: "L'émulateur multi-systèmes le plus puissant pour PS4. Jouez à des milliers de jeux rétro de plus de 50 consoles : NES, SNES, Genesis, PlayStation 1, N64, Arcade et bien plus.",
+            features: [
+                "Support de 50+ systèmes (NES, SNES, PS1, N64, etc.)",
+                "Netplay multijoueur en ligne",
+                "Shaders HD et filtres CRT authentiques",
+                "Save states (sauvegardes instantanées)",
+                "Rembobinage en jeu",
+                "Interface XMB style PS3"
+            ],
+            download: "https://buildbot.libretro.com/stable/1.17.0/playstation/ps4/RetroArch_rpx.pkg",
+            requirements: "PS4 firmware 9.00 ou supérieur"
+        },
+        {
+            name: "ItemzFlow",
+            category: "apps",
+            version: "v1.3",
+            size: "18 MB",
+            icon: "📦",
+            color: "#00BCD4",
+            description: "Gestionnaire de jeux et apps avec interface moderne. Organisez votre bibliothèque, téléchargez automatiquement les covers, installez des PKG via NFS et gérez vos backups facilement.",
+            features: [
+                "Bibliothèque de jeux avec covers automatiques",
+                "Installation PKG via FTP/NFS/USB",
+                "Gestion des mises à jour et DLC",
+                "Dump de jeux installés",
+                "Interface personnalisable",
+                "Support des trainers (cheats)"
+            ],
+            download: "https://pkg-zone.com/download/ITEM00001",
+            requirements: "GoldHEN, connexion réseau pour covers"
+        },
+        {
+            name: "FTP Server",
+            category: "tools",
+            version: "v1.4",
+            size: "1 MB",
+            icon: "📡",
+            color: "#607D8B",
+            description: "Serveur FTP ultra-rapide pour PS4. Transférez des fichiers entre votre PC et votre PS4 via Wi-Fi ou Ethernet. Simple, stable et jusqu'à 50 MB/s en filaire.",
+            features: [
+                "Transfert de fichiers PC ↔ PS4",
+                "Support FTP et FTPS (sécurisé)",
+                "Vitesse jusqu'à 50 MB/s en Ethernet",
+                "Accès complet au système de fichiers",
+                "Multi-connexions simultanées",
+                "Compatible FileZilla et tous clients FTP"
+            ],
+            download: "https://github.com/hippie68/ftps4/releases/latest/download/ftps4.pkg",
+            requirements: "Connexion réseau locale (Wi-Fi ou Ethernet)"
+        },
+        {
+            name: "PS4 Player",
+            category: "apps",
+            version: "v1.0.5",
+            size: "10 MB",
+            icon: "🎬",
+            color: "#E91E63",
+            description: "Lecteur multimédia complet pour PS4. Lisez vos films, séries, musique et photos depuis USB, disque dur ou streaming réseau. Support de tous les formats populaires.",
+            features: [
+                "Support MP4, MKV, AVI, MOV, FLV",
+                "Lecture depuis USB/HDD/SMB/NFS",
+                "Sous-titres SRT, ASS, SUB avec sync",
+                "Codec audio HD (AC3, DTS, FLAC)",
+                "Playlists et reprise de lecture",
+                "Contrôle tactile DualShock 4"
+            ],
+            download: "https://pkg-zone.com/download/LAPY20003",
+            requirements: "PS4 firmware 9.00 ou supérieur"
+        },
+        {
+            name: "Package Manager",
+            category: "tools",
+            version: "v1.2.1",
+            size: "4 MB",
+            icon: "📦",
+            color: "#795548",
+            description: "Gestionnaire de packages PKG professionnel. Installez, désinstallez et gérez tous vos PKG, DLC et patches avec vérification d'intégrité et backup automatique.",
+            features: [
+                "Installation PKG simplifiée et rapide",
+                "Gestion des DLC et patches",
+                "Backup automatique avant installation",
+                "Informations détaillées sur chaque PKG",
+                "Installation par lot (batch install)",
+                "Vérification d'intégrité MD5"
+            ],
+            download: "https://pkg-zone.com/download/PKGM40924",
+            requirements: "Espace disque libre suffisant"
+        },
+        {
+            name: "WebMAN MOD",
+            category: "tools",
+            version: "v1.47.45",
+            size: "2 MB",
+            icon: "🌐",
+            color: "#673AB7",
+            description: "L'outil système le plus puissant pour PS4. Montage ISO, gestion ventilateur, température, FTP, serveur web, backup et bien plus. L'indispensable pour toute PS4 jailbreakée.",
+            features: [
+                "Montage de jeux ISO/PKG",
+                "Contrôle manuel du ventilateur",
+                "Serveur FTP intégré",
+                "Interface web pour gestion à distance",
+                "Backup de jeux et sauvegardes",
+                "Affichage température et stats système"
+            ],
+            download: "https://github.com/aldostools/webMAN-MOD/releases/latest/download/webMAN_MOD_1.47.45_Installer.pkg",
+            requirements: "GoldHEN ou HEN, tous firmwares supportés"
+        },
+        {
+            name: "Dark Souls III Theme",
+            category: "themes",
+            version: "v1.0",
+            size: "8 MB",
+            icon: "🌙",
+            color: "#212121",
+            description: "Thème Dark Souls III officiel pour PS4. Plongez dans l'atmosphère sombre et épique de Lothric avec ce thème dynamique premium incluant musique et effets visuels.",
+            features: [
+                "Design Dark Souls III authentique",
+                "Fond d'écran animé HD",
+                "Icônes redessinées thème sombre",
+                "Musique d'ambiance épique",
+                "Sons système personnalisés",
+                "Compatible tous firmwares"
+            ],
+            download: "https://pkg-zone.com/download/THEME0001",
+            requirements: "Installation via Paramètres → Thèmes"
+        },
+        {
+            name: "Cyberpunk 2077 Theme",
+            category: "themes",
+            version: "v1.0",
+            size: "12 MB",
+            icon: "💠",
+            color: "#FF00FF",
+            description: "Thème Cyberpunk 2077 avec effets néon. Transformez votre PS4 en terminal futuriste de Night City avec des couleurs vibrantes et une ambiance cyberpunk immersive.",
+            features: [
+                "Design Cyberpunk 2077 officiel",
+                "Effets néon animés lumineux",
+                "Style cyberpunk/synthwave authentique",
+                "Fond d'écran 4K de Night City",
+                "Musique électro futuriste",
+                "Icônes au style cyberpunk"
+            ],
+            download: "https://pkg-zone.com/download/THEME0002",
+            requirements: "Installation via Paramètres → Thèmes"
         }
-    }
+    ];
 
-    function render(data) {
+    let filteredApps = [...apps];
+    let currentFilter = 'all';
+
+    function render() {
         const grid = document.getElementById('mainGrid');
-        // On affiche les 100 premiers pour la performance, la recherche trouvera le reste
-        const toDisplay = data.slice(0, 100); 
         
-        grid.innerHTML = toDisplay.map(game => `
-            <div class="card" onclick="openModal('${game.id}')">
-                <div class="card-cover" style="background-image: url('https://store.playstation.com/store/api/chihiro/00_09_000/container/US/en/999/${game.id}/image?w=400&h=400'), url('https://via.placeholder.com/300x400?text=PS4')">
-                    <div class="badge">${game.region || 'PS4'}</div>
+        grid.innerHTML = filteredApps.map((app, index) => `
+            <div class="card" onclick="openModal(${index})">
+                <div class="card-cover" style="background: linear-gradient(135deg, ${app.color}20, ${app.color}05);">
+                    <div style="font-size: 60px;">${app.icon}</div>
+                    <div class="badge">${app.category.toUpperCase()}</div>
                 </div>
                 <div class="card-info">
-                    <div class="card-title">${game.name}</div>
-                    <div class="card-size">${game.size || 'Taille inconnue'}</div>
+                    <div class="card-title">${app.name}</div>
+                    <div class="card-desc">${app.description.substring(0, 80)}...</div>
                 </div>
             </div>
         `).join('');
+        
+        document.getElementById('count').innerText = `${filteredApps.length} ${filteredApps.length > 1 ? 'APPS' : 'APP'}`;
     }
 
-    // Barre de recherche temps réel
+    function filterCategory(category) {
+        currentFilter = category;
+        
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        if (category === 'all') {
+            filteredApps = [...apps];
+        } else {
+            filteredApps = apps.filter(app => app.category === category);
+        }
+        
+        render();
+    }
+
     document.getElementById('searchInput').addEventListener('input', (e) => {
         const val = e.target.value.toLowerCase();
-        const filtered = db.filter(g => g.name.toLowerCase().includes(val) || g.id.toLowerCase().includes(val));
-        render(filtered);
+        
+        if (currentFilter === 'all') {
+            filteredApps = apps.filter(app => 
+                app.name.toLowerCase().includes(val) ||
+                app.description.toLowerCase().includes(val)
+            );
+        } else {
+            filteredApps = apps.filter(app => 
+                app.category === currentFilter &&
+                (app.name.toLowerCase().includes(val) || app.description.toLowerCase().includes(val))
+            );
+        }
+        
+        render();
     });
 
-    function openModal(id) {
-        selectedGame = db.find(g => g.id === id);
-        if(!selectedGame) return;
-
-        document.getElementById('modalTitle').innerText = selectedGame.name;
-        document.getElementById('modalID').innerText = "ID: " + selectedGame.id;
-        document.getElementById('modalRegion').innerText = "Région: " + (selectedGame.region || "Inconnue");
-        document.getElementById('modalSize').innerText = "Taille: " + (selectedGame.size || "N/A");
-        document.getElementById('modalImg').style.backgroundImage = `url('https://store.playstation.com/store/api/chihiro/00_09_000/container/US/en/999/${selectedGame.id}/image?w=800&h=800')`;
+    function openModal(index) {
+        const app = filteredApps[index];
+        
+        document.getElementById('modalTitle').innerText = app.name;
+        document.getElementById('modalCategory').innerText = `📂 ${app.category.toUpperCase()}`;
+        document.getElementById('modalVersion').innerText = `📌 ${app.version}`;
+        document.getElementById('modalSize').innerText = `💾 ${app.size}`;
+        
+        const featuresHTML = app.features.map(f => `<li>${f}</li>`).join('');
+        
+        document.getElementById('modalBody').innerHTML = `
+            <h3>📋 Description</h3>
+            <p>${app.description}</p>
+            
+            <h3>✨ Fonctionnalités</h3>
+            <ul>${featuresHTML}</ul>
+            
+            <h3>⚙️ Prérequis</h3>
+            <p>${app.requirements}</p>
+        `;
+        
+        const downloadBtn = document.getElementById('modalDownload');
+        downloadBtn.href = app.download;
         
         document.getElementById('modalOverlay').classList.add('active');
     }
 
-    function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
-
-    function download() {
-        if(selectedGame && selectedGame.download_url) {
-            window.open(selectedGame.download_url, '_blank');
-        } else {
-            alert("Lien de téléchargement non disponible.");
-        }
+    function closeModal() {
+        document.getElementById('modalOverlay').classList.remove('active');
     }
 
-    window.onload = fetchData;
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+    });
+
+    render();
 </script>
+
 </body>
 </html>
