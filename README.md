@@ -24,6 +24,13 @@
 * **🔓 Code Open Source :** Le projet est transparent et partagé sous licence GPL v3. Tout le monde peut consulter le code et vérifier sa sécurité.
 
 
+<p align="center">
+  <img src="screen.png" alt="Nexa Store Screenshot">
+  <br>
+  <sub><i>*Capture d'écran officielle du Nexa Store affichée sur PC.</i></sub>
+</p>
+
+
 ## 📅 À venir (Roadmap)
 
 Le Nexa Store continue d'évoluer avec de nouvelles fonctionnalités et du contenu ajouté régulièrement :
