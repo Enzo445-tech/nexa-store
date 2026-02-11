@@ -2,3 +2,7 @@ Changelog NEXA Store
 v1.2.2 (09/02/26)
 -Correction des bugs d'affichage (icônes Unicode)
 -Optimisation pour le navigateur PS4 
+
+v1.2.3 (11/02/26)
+-Optimisation du système Unicode
+-Ajout d'un système de code erreur : Nexa Error, sous format NX-000
