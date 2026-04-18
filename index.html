@@ -1,620 +1,1153 @@
 <!DOCTYPE html>
+
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXA STORE - PS4 Homebrew</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root { --ps5-blue: #0070cc; --ps5-white: #ffffff; --accent: #00d4ff; }
-        body { background: radial-gradient(circle at top right, #1a1a2e, #0a0a0a); color: var(--ps5-white); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
-        
-        /* ERROR BANNER NX-XXX */
-        .error-banner {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(220, 20, 60, 0.95);
-            color: white;
-            padding: 20px 30px;
-            border-radius: 10px;
-            border: 2px solid #ff4444;
-            box-shadow: 0 10px 40px rgba(220, 20, 60, 0.5);
-            z-index: 10000;
-            max-width: 90%;
-            text-align: center;
-            animation: slideDown 0.5s ease-out;
-        }
-        
-        .error-banner .error-code {
-            font-size: 28px;
-            font-weight: 900;
-            margin-bottom: 10px;
-            letter-spacing: 3px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        }
-        
-        .error-banner .error-message {
-            font-size: 14px;
-            line-height: 1.6;
-        }
-        
-        @keyframes slideDown {
-            from { top: -100px; opacity: 0; }
-            to { top: 20px; opacity: 1; }
-        }
-        
-        /* HEADER */
-        header { 
-            background: rgba(0, 0, 0, 0.7); 
-            backdrop-filter: blur(20px); 
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
-            padding: 25px 50px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between;
-            position: sticky; 
-            top: 0; 
-            z-index: 100; 
-            gap: 30px;
-        }
-        
-        .logo { 
-            display: flex;
-            align-items: center;
-            white-space: nowrap;
-        }
-        
-        .search-box { flex: 1; max-width: 600px; }
-        .search-box input { width: 100%; padding: 14px 28px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50px; color: white; outline: none; transition: 0.3s; font-size: 14px; }
-        .search-box input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(0, 212, 255, 0.4); }
-        
-        .header-info { display: flex; gap: 20px; align-items: center; white-space: nowrap; }
-        .count { font-size: 13px; opacity: 0.7; }
-        .version { font-size: 13px; opacity: 0.6; background: rgba(255, 255, 255, 0.1); padding: 6px 14px; border-radius: 15px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexaMobile — Connectez l'essentiel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* TABS */
-        .tabs { display: flex; gap: 12px; padding: 25px 50px; flex-wrap: wrap; }
-        .tab { padding: 12px 24px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; cursor: pointer; transition: 0.3s; font-size: 14px; }
-        .tab.active { background: var(--ps5-blue); border-color: var(--accent); }
-        .tab:hover { border-color: var(--accent); }
+:root {
+–white: #ffffff;
+–black: #000000;
+–gray-50: #f5f5f7;
+–gray-100: #e8e8ed;
+–gray-300: #b0b0b8;
+–gray-500: #6e6e73;
+–gray-700: #3a3a3c;
+–gray-900: #1d1d1f;
+–blue: #0071e3;
+–blue-hover: #0077ed;
+–blue-light: #e8f1fb;
+–green: #30d158;
+–purple: #bf5af2;
+–orange: #ff9f0a;
+}
 
-        /* MAIN CONTENT */
-        .main-wrapper { flex: 1; }
-        .container { padding: 30px 50px; max-width: 1600px; margin: 0 auto; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 25px; margin-bottom: 60px; }
-        
-        /* CARDS */
-        .card { background: rgba(255, 255, 255, 0.05); border-radius: 15px; overflow: hidden; transition: 0.4s; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; }
-        .card:hover { transform: translateY(-10px); border-color: var(--accent); background: rgba(255, 255, 255, 0.1); box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3); }
-        .card-cover { width: 100%; aspect-ratio: 16/9; background-size: contain; background-position: center; background-repeat: no-repeat; background-color: #1a1a2e; position: relative; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .badge { position: absolute; top: 10px; right: 10px; background: var(--ps5-blue); padding: 4px 10px; border-radius: 5px; font-size: 10px; font-weight: bold; text-transform: uppercase; }
-        .card-info { padding: 15px; }
-        .card-title { font-size: 14px; font-weight: bold; margin-bottom: 5px; }
-        .card-desc { font-size: 11px; color: rgba(255, 255, 255, 0.6); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+html { scroll-behavior: smooth; }
 
-        /* MODAL */
-        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(10px); padding: 20px; overflow-y: auto; }
-        .modal-overlay.active { display: flex; }
-        .modal { background: #1a1a1a; width: 100%; max-width: 900px; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); max-height: 90vh; display: flex; flex-direction: column; margin: auto; }
-        .modal-header { padding: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .modal-header h2 { font-size: 28px; margin-bottom: 10px; }
-        .modal-header .meta { display: flex; gap: 15px; font-size: 13px; opacity: 0.7; flex-wrap: wrap; }
-        .modal-body { padding: 30px; overflow-y: auto; flex: 1; }
-        .modal-body h3 { color: var(--accent); margin: 20px 0 15px 0; font-size: 18px; }
-        .modal-body h3:first-child { margin-top: 0; }
-        .modal-body p { line-height: 1.8; margin-bottom: 15px; opacity: 0.9; }
-        .modal-body ul { margin-left: 20px; line-height: 2; opacity: 0.9; margin-bottom: 15px; }
-        .developer-info { background: rgba(0, 112, 204, 0.1); border-left: 3px solid var(--ps5-blue); padding: 12px 15px; margin: 15px 0; border-radius: 5px; font-size: 14px; }
-        .theme-instruction { background: rgba(0, 212, 255, 0.1); border-left: 3px solid var(--accent); padding: 15px; margin: 15px 0; border-radius: 5px; }
-        .modal-footer { padding: 25px 30px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 12px; flex-wrap: wrap; }
-        .btn { padding: 16px 32px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; border: none; font-size: 15px; text-align: center; text-decoration: none; display: inline-block; white-space: nowrap; flex: 1; min-width: 200px; }
-        .btn-primary { background: var(--ps5-blue); color: white; }
-        .btn-primary:hover { background: #0084ff; transform: scale(1.02); }
-        .btn-close { background: #333; color: white; }
-        .btn-close:hover { background: #444; }
+body {
+font-family: -apple-system, BlinkMacSystemFont, ‘SF Pro Display’, ‘Helvetica Neue’, sans-serif;
+background: var(–white);
+color: var(–gray-900);
+-webkit-font-smoothing: antialiased;
+overflow-x: hidden;
+}
 
-        /* FOOTER STYLE PLAYSTATION */
-        footer {
-            background: rgba(0, 0, 0, 0.9);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 30px 50px;
-            text-align: center;
-            font-size: 11px;
-            line-height: 1.8;
-            color: #888;
-            font-weight: 300;
-        }
-        footer p { margin: 8px 0; }
-        footer .copyright { color: #999; font-size: 12px; font-weight: 400; margin-bottom: 10px; }
-        footer .legal { color: #666; font-size: 10px; }
-        footer .credits { margin-top: 12px; color: #777; font-size: 10px; opacity: 0.8; }
-        footer .credits strong { color: var(--accent); font-weight: 600; }
+/* ─── NAV ─── */
+nav {
+position: fixed;
+top: 0; left: 0; right: 0;
+z-index: 1000;
+background: rgba(255,255,255,0.82);
+backdrop-filter: saturate(180%) blur(20px);
+-webkit-backdrop-filter: saturate(180%) blur(20px);
+border-bottom: 1px solid rgba(0,0,0,0.08);
+height: 48px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 0 40px;
+}
 
-        /* RESPONSIVE */
-        @media (max-width: 968px) {
-            header { flex-direction: column; align-items: stretch; padding: 20px; gap: 15px; }
-            .logo { text-align: center; font-size: 22px; }
-            .search-box { max-width: 100%; }
-            .header-info { justify-content: center; }
-            .tabs, .container { padding: 20px; }
-            .modal-footer { flex-direction: column; }
-            .btn { min-width: 100%; }
-            footer { padding: 25px 20px; font-size: 10px; }
-        }
-    </style>
+.nav-logo {
+font-size: 18px;
+font-weight: 600;
+color: var(–gray-900);
+letter-spacing: -0.3px;
+text-decoration: none;
+}
+
+.nav-links {
+display: flex;
+gap: 32px;
+list-style: none;
+}
+
+.nav-links a {
+font-size: 13px;
+color: var(–gray-700);
+text-decoration: none;
+transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(–gray-900); }
+
+.nav-cta {
+background: var(–blue);
+color: white;
+border: none;
+border-radius: 980px;
+padding: 7px 18px;
+font-size: 13px;
+font-weight: 500;
+cursor: pointer;
+transition: background 0.2s;
+text-decoration: none;
+}
+
+.nav-cta:hover { background: var(–blue-hover); }
+
+/* ─── HERO ─── */
+.hero {
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+text-align: center;
+padding: 120px 24px 80px;
+background: var(–white);
+position: relative;
+overflow: hidden;
+}
+
+.hero::before {
+content: ‘’;
+position: absolute;
+inset: 0;
+background:
+radial-gradient(ellipse 900px 600px at 50% -100px, rgba(0,113,227,0.07) 0%, transparent 70%),
+radial-gradient(ellipse 600px 400px at 100% 50%, rgba(191,90,242,0.04) 0%, transparent 60%),
+radial-gradient(ellipse 500px 300px at 0% 80%, rgba(48,209,88,0.03) 0%, transparent 60%);
+pointer-events: none;
+}
+
+.hero-eyebrow {
+display: inline-flex;
+align-items: center;
+gap: 6px;
+background: var(–gray-50);
+border: 1px solid var(–gray-100);
+border-radius: 980px;
+padding: 5px 14px;
+font-size: 12px;
+font-weight: 500;
+color: var(–gray-500);
+letter-spacing: 0.2px;
+margin-bottom: 32px;
+animation: fadeUp 0.7s ease both;
+}
+
+.hero-eyebrow span { color: var(–green); font-size: 8px; }
+
+.hero h1 {
+font-size: clamp(48px, 8vw, 96px);
+font-weight: 700;
+letter-spacing: -3px;
+line-height: 1.02;
+color: var(–gray-900);
+max-width: 900px;
+margin-bottom: 24px;
+animation: fadeUp 0.7s 0.1s ease both;
+}
+
+.hero h1 em {
+font-style: normal;
+background: linear-gradient(135deg, #0071e3, #bf5af2);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+
+.hero-sub {
+font-size: clamp(17px, 2vw, 21px);
+color: var(–gray-500);
+font-weight: 400;
+max-width: 560px;
+line-height: 1.5;
+margin-bottom: 48px;
+animation: fadeUp 0.7s 0.2s ease both;
+}
+
+.hero-actions {
+display: flex;
+gap: 16px;
+animation: fadeUp 0.7s 0.3s ease both;
+}
+
+.btn-primary {
+background: var(–blue);
+color: white;
+border: none;
+border-radius: 980px;
+padding: 14px 32px;
+font-size: 17px;
+font-weight: 500;
+cursor: pointer;
+transition: background 0.2s, transform 0.15s;
+text-decoration: none;
+display: inline-block;
+}
+
+.btn-primary:hover { background: var(–blue-hover); transform: scale(1.01); }
+
+.btn-secondary {
+background: transparent;
+color: var(–blue);
+border: none;
+border-radius: 980px;
+padding: 14px 32px;
+font-size: 17px;
+font-weight: 500;
+cursor: pointer;
+transition: color 0.2s;
+text-decoration: none;
+display: inline-block;
+}
+
+.btn-secondary:hover { color: var(–blue-hover); }
+
+/* Floating phones illustration */
+.hero-visual {
+margin-top: 64px;
+position: relative;
+animation: fadeUp 0.8s 0.4s ease both;
+}
+
+.esim-badge {
+display: inline-flex;
+align-items: center;
+gap: 8px;
+background: var(–gray-900);
+color: white;
+border-radius: 14px;
+padding: 16px 28px;
+font-size: 15px;
+font-weight: 500;
+letter-spacing: -0.2px;
+}
+
+.esim-badge .esim-icon {
+width: 32px;
+height: 22px;
+background: linear-gradient(135deg, #0071e3, #bf5af2);
+border-radius: 4px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 9px;
+font-weight: 700;
+color: white;
+letter-spacing: 0.5px;
+}
+
+/* ─── SECTION HEADER ─── */
+.section-header {
+text-align: center;
+margin-bottom: 64px;
+}
+
+.section-eyebrow {
+font-size: 13px;
+font-weight: 600;
+color: var(–blue);
+letter-spacing: 0.5px;
+text-transform: uppercase;
+margin-bottom: 12px;
+}
+
+.section-title {
+font-size: clamp(32px, 5vw, 52px);
+font-weight: 700;
+letter-spacing: -2px;
+color: var(–gray-900);
+line-height: 1.06;
+}
+
+.section-sub {
+font-size: 17px;
+color: var(–gray-500);
+margin-top: 16px;
+max-width: 500px;
+margin-left: auto;
+margin-right: auto;
+}
+
+/* ─── PLANS ─── */
+.plans-section {
+padding: 120px 24px;
+background: var(–gray-50);
+}
+
+.plans-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 20px;
+max-width: 1100px;
+margin: 0 auto;
+}
+
+.plan-card {
+background: white;
+border-radius: 28px;
+padding: 40px 36px;
+position: relative;
+transition: transform 0.3s, box-shadow 0.3s;
+border: 1px solid rgba(0,0,0,0.06);
+overflow: hidden;
+}
+
+.plan-card:hover {
+transform: translateY(-6px);
+box-shadow: 0 32px 64px rgba(0,0,0,0.1);
+}
+
+.plan-card.featured {
+background: var(–gray-900);
+color: white;
+border-color: transparent;
+transform: scale(1.03);
+}
+
+.plan-card.featured:hover {
+transform: scale(1.03) translateY(-6px);
+box-shadow: 0 40px 80px rgba(0,0,0,0.3);
+}
+
+.plan-card.featured::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 3px;
+background: linear-gradient(90deg, #0071e3, #bf5af2, #30d158);
+}
+
+.plan-badge {
+display: inline-block;
+background: var(–blue);
+color: white;
+font-size: 11px;
+font-weight: 600;
+letter-spacing: 0.4px;
+text-transform: uppercase;
+border-radius: 980px;
+padding: 4px 12px;
+margin-bottom: 24px;
+}
+
+.plan-card.featured .plan-badge {
+background: rgba(255,255,255,0.15);
+}
+
+.plan-name {
+font-size: 26px;
+font-weight: 700;
+letter-spacing: -0.8px;
+margin-bottom: 4px;
+color: var(–gray-900);
+}
+
+.plan-card.featured .plan-name { color: white; }
+
+.plan-tagline {
+font-size: 14px;
+color: var(–gray-500);
+margin-bottom: 32px;
+}
+
+.plan-card.featured .plan-tagline { color: rgba(255,255,255,0.5); }
+
+.plan-data {
+font-size: 72px;
+font-weight: 700;
+letter-spacing: -4px;
+line-height: 1;
+color: var(–gray-900);
+margin-bottom: 4px;
+}
+
+.plan-card.featured .plan-data { color: white; }
+
+.plan-data-unit {
+font-size: 18px;
+font-weight: 600;
+letter-spacing: -0.5px;
+color: var(–gray-500);
+margin-bottom: 6px;
+}
+
+.plan-card.featured .plan-data-unit { color: rgba(255,255,255,0.5); }
+
+.plan-5g {
+display: inline-flex;
+align-items: center;
+gap: 4px;
+background: var(–blue-light);
+color: var(–blue);
+border-radius: 6px;
+padding: 3px 8px;
+font-size: 12px;
+font-weight: 700;
+letter-spacing: 0.5px;
+margin-bottom: 32px;
+}
+
+.plan-card.featured .plan-5g {
+background: rgba(0,113,227,0.25);
+color: #60a5fa;
+}
+
+.plan-divider {
+height: 1px;
+background: var(–gray-100);
+margin: 24px 0;
+}
+
+.plan-card.featured .plan-divider { background: rgba(255,255,255,0.1); }
+
+.plan-features {
+list-style: none;
+margin-bottom: 36px;
+display: flex;
+flex-direction: column;
+gap: 12px;
+}
+
+.plan-features li {
+display: flex;
+align-items: center;
+gap: 10px;
+font-size: 15px;
+color: var(–gray-700);
+}
+
+.plan-card.featured .plan-features li { color: rgba(255,255,255,0.75); }
+
+.plan-features li .check {
+width: 20px;
+height: 20px;
+border-radius: 50%;
+background: rgba(48,209,88,0.12);
+color: var(–green);
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 11px;
+flex-shrink: 0;
+}
+
+.plan-price {
+font-size: 42px;
+font-weight: 700;
+letter-spacing: -2px;
+color: var(–gray-900);
+line-height: 1;
+margin-bottom: 4px;
+}
+
+.plan-card.featured .plan-price { color: white; }
+
+.plan-price sup {
+font-size: 22px;
+font-weight: 600;
+vertical-align: top;
+margin-top: 6px;
+letter-spacing: 0;
+}
+
+.plan-period {
+font-size: 14px;
+color: var(–gray-500);
+margin-bottom: 28px;
+}
+
+.plan-card.featured .plan-period { color: rgba(255,255,255,0.45); }
+
+.plan-cta {
+display: block;
+width: 100%;
+text-align: center;
+border-radius: 12px;
+padding: 14px;
+font-size: 15px;
+font-weight: 600;
+cursor: pointer;
+border: none;
+transition: all 0.2s;
+text-decoration: none;
+}
+
+.plan-cta-light {
+background: var(–blue);
+color: white;
+}
+
+.plan-cta-light:hover { background: var(–blue-hover); }
+
+.plan-cta-dark {
+background: white;
+color: var(–gray-900);
+}
+
+.plan-cta-dark:hover { background: var(–gray-50); }
+
+/* ─── FEATURES ─── */
+.features-section {
+padding: 120px 24px;
+background: white;
+}
+
+.features-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 2px;
+max-width: 1100px;
+margin: 0 auto;
+background: var(–gray-100);
+border-radius: 24px;
+overflow: hidden;
+}
+
+.feature-item {
+background: white;
+padding: 48px 40px;
+transition: background 0.2s;
+}
+
+.feature-item:hover { background: var(–gray-50); }
+
+.feature-icon {
+width: 48px;
+height: 48px;
+border-radius: 14px;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 22px;
+margin-bottom: 20px;
+}
+
+.fi-blue { background: rgba(0,113,227,0.1); }
+.fi-green { background: rgba(48,209,88,0.1); }
+.fi-purple { background: rgba(191,90,242,0.1); }
+.fi-orange { background: rgba(255,159,10,0.1); }
+.fi-red { background: rgba(255,69,58,0.1); }
+.fi-teal { background: rgba(90,200,250,0.1); }
+
+.feature-title {
+font-size: 19px;
+font-weight: 600;
+letter-spacing: -0.4px;
+color: var(–gray-900);
+margin-bottom: 8px;
+}
+
+.feature-desc {
+font-size: 15px;
+color: var(–gray-500);
+line-height: 1.5;
+}
+
+/* ─── COVERAGE ─── */
+.coverage-section {
+padding: 120px 24px;
+background: var(–gray-900);
+color: white;
+text-align: center;
+position: relative;
+overflow: hidden;
+}
+
+.coverage-section::before {
+content: ‘’;
+position: absolute;
+inset: 0;
+background:
+radial-gradient(ellipse 800px 600px at 50% 50%, rgba(0,113,227,0.2) 0%, transparent 70%);
+}
+
+.coverage-section .section-eyebrow { color: #60a5fa; }
+.coverage-section .section-title { color: white; }
+.coverage-section .section-sub { color: rgba(255,255,255,0.5); }
+
+.coverage-stats {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 2px;
+max-width: 800px;
+margin: 64px auto 0;
+background: rgba(255,255,255,0.06);
+border-radius: 24px;
+overflow: hidden;
+}
+
+.coverage-stat {
+padding: 40px;
+background: rgba(255,255,255,0.03);
+}
+
+.coverage-stat-num {
+font-size: 52px;
+font-weight: 700;
+letter-spacing: -2px;
+line-height: 1;
+background: linear-gradient(135deg, white, rgba(255,255,255,0.6));
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+background-clip: text;
+}
+
+.coverage-stat-label {
+font-size: 14px;
+color: rgba(255,255,255,0.4);
+margin-top: 6px;
+}
+
+/* ─── ESIM BANNER ─── */
+.esim-section {
+padding: 80px 24px;
+background: var(–gray-50);
+}
+
+.esim-banner {
+max-width: 1100px;
+margin: 0 auto;
+background: var(–gray-900);
+border-radius: 28px;
+padding: 64px 80px;
+display: grid;
+grid-template-columns: 1fr auto;
+align-items: center;
+gap: 48px;
+position: relative;
+overflow: hidden;
+}
+
+.esim-banner::before {
+content: ‘’;
+position: absolute;
+top: -80px; right: -80px;
+width: 320px;
+height: 320px;
+border-radius: 50%;
+background: radial-gradient(circle, rgba(0,113,227,0.25), transparent 70%);
+pointer-events: none;
+}
+
+.esim-banner-title {
+font-size: clamp(28px, 4vw, 42px);
+font-weight: 700;
+letter-spacing: -1.5px;
+color: white;
+line-height: 1.1;
+margin-bottom: 12px;
+}
+
+.esim-banner-sub {
+font-size: 15px;
+color: rgba(255,255,255,0.5);
+line-height: 1.5;
+}
+
+.esim-graphic {
+width: 180px;
+height: 120px;
+background: linear-gradient(135deg, #1c1c1e, #2c2c2e);
+border-radius: 20px;
+border: 1px solid rgba(255,255,255,0.08);
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 8px;
+flex-shrink: 0;
+}
+
+.esim-chip {
+width: 56px;
+height: 38px;
+background: linear-gradient(135deg, #0071e3, #bf5af2);
+border-radius: 8px;
+position: relative;
+overflow: hidden;
+}
+
+.esim-chip::after {
+content: ‘’;
+position: absolute;
+inset: 3px;
+border: 1.5px solid rgba(255,255,255,0.25);
+border-radius: 5px;
+}
+
+.esim-graphic span {
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 1px;
+color: rgba(255,255,255,0.4);
+text-transform: uppercase;
+}
+
+/* ─── FAQ ─── */
+.faq-section {
+padding: 120px 24px;
+background: white;
+max-width: 760px;
+margin: 0 auto;
+}
+
+.faq-item {
+border-bottom: 1px solid var(–gray-100);
+overflow: hidden;
+}
+
+.faq-question {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 22px 0;
+font-size: 17px;
+font-weight: 500;
+color: var(–gray-900);
+cursor: pointer;
+gap: 20px;
+user-select: none;
+}
+
+.faq-question:hover { color: var(–blue); }
+
+.faq-icon {
+width: 24px;
+height: 24px;
+border-radius: 50%;
+background: var(–gray-50);
+display: flex;
+align-items: center;
+justify-content: center;
+flex-shrink: 0;
+font-size: 16px;
+color: var(–gray-500);
+transition: transform 0.3s, background 0.2s;
+}
+
+.faq-item.open .faq-icon {
+transform: rotate(45deg);
+background: var(–blue);
+color: white;
+}
+
+.faq-answer {
+font-size: 15px;
+color: var(–gray-500);
+line-height: 1.6;
+max-height: 0;
+overflow: hidden;
+transition: max-height 0.35s ease, padding 0.3s;
+}
+
+.faq-item.open .faq-answer {
+max-height: 200px;
+padding-bottom: 22px;
+}
+
+/* ─── FOOTER ─── */
+footer {
+background: var(–gray-50);
+padding: 48px 40px 32px;
+border-top: 1px solid var(–gray-100);
+}
+
+.footer-top {
+display: grid;
+grid-template-columns: 2fr 1fr 1fr 1fr;
+gap: 48px;
+max-width: 1100px;
+margin: 0 auto 48px;
+}
+
+.footer-brand p {
+font-size: 13px;
+color: var(–gray-500);
+line-height: 1.6;
+margin-top: 12px;
+max-width: 260px;
+}
+
+.footer-col h4 {
+font-size: 13px;
+font-weight: 600;
+color: var(–gray-900);
+margin-bottom: 16px;
+letter-spacing: -0.1px;
+}
+
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+.footer-col a {
+font-size: 13px;
+color: var(–gray-500);
+text-decoration: none;
+transition: color 0.2s;
+}
+
+.footer-col a:hover { color: var(–gray-900); }
+
+.footer-bottom {
+max-width: 1100px;
+margin: 0 auto;
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding-top: 20px;
+border-top: 1px solid var(–gray-100);
+}
+
+.footer-bottom p {
+font-size: 12px;
+color: var(–gray-300);
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(24px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+opacity: 0;
+transform: translateY(30px);
+transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.fade-in.visible {
+opacity: 1;
+transform: translateY(0);
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+nav { padding: 0 24px; }
+.nav-links { display: none; }
+.plans-grid { grid-template-columns: 1fr; max-width: 420px; }
+.plan-card.featured { transform: scale(1); }
+.features-grid { grid-template-columns: 1fr; }
+.coverage-stats { grid-template-columns: 1fr; }
+.esim-banner { grid-template-columns: 1fr; padding: 40px; text-align: center; }
+.esim-graphic { margin: 0 auto; }
+.footer-top { grid-template-columns: 1fr 1fr; }
+.footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+}
+</style>
+
 </head>
 <body>
 
-<header>
-   <div class="logo">
-    <img src="logo.PNG" alt="NEXA" style="height: 60px; width: auto; vertical-align: middle;">
-</div>
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Rechercher des apps, thèmes, outils...">
+<!-- NAV -->
+
+<nav>
+  <a href="#" class="nav-logo">NexaMobile</a>
+  <ul class="nav-links">
+    <li><a href="#plans">Forfaits</a></li>
+    <li><a href="#features">Avantages</a></li>
+    <li><a href="#coverage">Réseau</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a href="#plans" class="nav-cta">Choisir un forfait</a>
+</nav>
+
+<!-- HERO -->
+
+<section class="hero">
+  <div class="hero-eyebrow">
+    <span>●</span> eSIM — Activation instantanée
+  </div>
+  <h1>La <em>connectivité</em><br>sans compromis.</h1>
+  <p class="hero-sub">Appels, SMS illimités. 5G. Sans engagement. Activez votre eSIM en quelques secondes, où que vous soyez.</p>
+  <div class="hero-actions">
+    <a href="#plans" class="btn-primary">Voir les forfaits</a>
+    <a href="#features" class="btn-secondary">En savoir plus →</a>
+  </div>
+  <div class="hero-visual">
+    <div class="esim-badge">
+      <div class="esim-icon">eSIM</div>
+      Gratuite · Instant · Sans carte physique
     </div>
-    <div class="header-info">
-        <div class="count" id="count">Contenu : 0 élément</div>
-        <div class="version">V1.2.5</div>
-    </div>
-</header>
-   <div style="padding: 0 50px; margin-top: 20px;">
-    <div style="
-        background: #1a1a1a; 
-        border: 1px solid #333; 
-        color: #888; 
-        padding: 8px 20px; 
-        border-radius: 50px; 
-        font-size: 13px;
-        display: inline-block;
-        font-family: sans-serif;">
-        Nécessite <span style="; font-weight: bold;">GoldHEN</span> — Firmware <strong>5.05 à 12.52</strong>
-    </div>
+  </div>
+</section>
+
+<!-- PLANS -->
+
+<section class="plans-section" id="plans">
+  <div class="section-header fade-in">
+    <p class="section-eyebrow">Forfaits</p>
+    <h2 class="section-title">Choisissez votre rythme.</h2>
+    <p class="section-sub">Tout inclus. Aucun engagement. Résiliez quand vous voulez.</p>
+  </div>
+
+  <div class="plans-grid">
+
+```
+<!-- Plan 1: Néon -->
+<div class="plan-card fade-in">
+  <span class="plan-badge">Essentiel</span>
+  <div class="plan-name">Néon</div>
+  <div class="plan-tagline">Pour rester connecté partout</div>
+  <div class="plan-data">100</div>
+  <div class="plan-data-unit">Go de données</div>
+  <span class="plan-5g">⚡ 5G incluse</span>
+  <div class="plan-divider"></div>
+  <ul class="plan-features">
+    <li><span class="check">✓</span> Appels illimités</li>
+    <li><span class="check">✓</span> SMS / MMS illimités</li>
+    <li><span class="check">✓</span> eSIM gratuite</li>
+    <li><span class="check">✓</span> Sans engagement</li>
+    <li><span class="check">✓</span> Activation en 2 min</li>
+  </ul>
+  <div class="plan-price"><sup>€</sup>7<sup>,99</sup></div>
+  <div class="plan-period">/mois · sans engagement</div>
+  <a href="#" class="plan-cta plan-cta-light">Choisir Néon →</a>
 </div>
 
-<div class="tabs">
-    <div class="tab active" onclick="filterCategory('all')">Tous</div>
-    <div class="tab" onclick="filterCategory('apps')">Applications</div>
-    <div class="tab" onclick="filterCategory('tools')">Outils</div>
-    <div class="tab" onclick="filterCategory('themes')">Thèmes</div>
+<!-- Plan 2: Nova (featured) -->
+<div class="plan-card featured fade-in">
+  <span class="plan-badge">⭐ Populaire</span>
+  <div class="plan-name">Nova</div>
+  <div class="plan-tagline">L'équilibre parfait</div>
+  <div class="plan-data">200</div>
+  <div class="plan-data-unit">Go de données</div>
+  <span class="plan-5g">⚡ 5G incluse</span>
+  <div class="plan-divider"></div>
+  <ul class="plan-features">
+    <li><span class="check">✓</span> Appels illimités</li>
+    <li><span class="check">✓</span> SMS / MMS illimités</li>
+    <li><span class="check">✓</span> eSIM gratuite</li>
+    <li><span class="check">✓</span> Sans engagement</li>
+    <li><span class="check">✓</span> Activation en 2 min</li>
+  </ul>
+  <div class="plan-price"><sup>€</sup>16<sup>,99</sup></div>
+  <div class="plan-period">/mois · sans engagement</div>
+  <a href="#" class="plan-cta plan-cta-dark">Choisir Nova →</a>
 </div>
 
-<div class="main-wrapper">
-    <div class="container">
-        <div class="grid" id="mainGrid"></div>
-    </div>
+<!-- Plan 3: Zénith -->
+<div class="plan-card fade-in">
+  <span class="plan-badge">Premium</span>
+  <div class="plan-name">Zénith</div>
+  <div class="plan-tagline">Zéro limite, zéro stress</div>
+  <div class="plan-data">350</div>
+  <div class="plan-data-unit">Go de données</div>
+  <span class="plan-5g">⚡ 5G incluse</span>
+  <div class="plan-divider"></div>
+  <ul class="plan-features">
+    <li><span class="check">✓</span> Appels illimités</li>
+    <li><span class="check">✓</span> SMS / MMS illimités</li>
+    <li><span class="check">✓</span> eSIM gratuite</li>
+    <li><span class="check">✓</span> Sans engagement</li>
+    <li><span class="check">✓</span> Activation en 2 min</li>
+  </ul>
+  <div class="plan-price"><sup>€</sup>19<sup>,99</sup></div>
+  <div class="plan-period">/mois · sans engagement</div>
+  <a href="#" class="plan-cta plan-cta-light">Choisir Zénith →</a>
 </div>
+```
+
+  </div>
+</section>
+
+<!-- FEATURES -->
+
+<section class="features-section" id="features">
+  <div class="section-header fade-in">
+    <p class="section-eyebrow">Pourquoi NexaMobile</p>
+    <h2 class="section-title">Conçu pour être simple.</h2>
+    <p class="section-sub">Chaque détail a été pensé pour votre tranquillité d'esprit.</p>
+  </div>
+
+  <div class="features-grid fade-in">
+    <div class="feature-item">
+      <div class="feature-icon fi-blue">⚡</div>
+      <div class="feature-title">5G ultra-rapide</div>
+      <p class="feature-desc">Profitez des débits les plus élevés du marché, partout où la 5G est disponible.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon fi-green">🔒</div>
+      <div class="feature-title">Sans engagement</div>
+      <p class="feature-desc">Résiliez à tout moment, sans frais ni justification. Vous êtes libre.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon fi-purple">📱</div>
+      <div class="feature-title">eSIM gratuite</div>
+      <p class="feature-desc">Activez votre forfait en quelques secondes directement sur votre appareil.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon fi-orange">📞</div>
+      <div class="feature-title">Appels & SMS illimités</div>
+      <p class="feature-desc">Appelez et envoyez des messages sans jamais regarder le compteur.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon fi-red">🌍</div>
+      <div class="feature-title">Roaming Europe</div>
+      <p class="feature-desc">Voyagez sereinement dans toute l'Union Européenne sans surcoût.</p>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon fi-teal">💬</div>
+      <div class="feature-title">Support 24/7</div>
+      <p class="feature-desc">Une équipe dédiée disponible à tout moment pour vous accompagner.</p>
+    </div>
+  </div>
+</section>
+
+<!-- COVERAGE -->
+
+<section class="coverage-section" id="coverage">
+  <div style="position:relative;z-index:1;">
+    <p class="section-eyebrow">Réseau</p>
+    <h2 class="section-title" style="color:white;">Une couverture nationale.</h2>
+    <p class="section-sub">NexaMobile s'appuie sur le réseau 5G le plus étendu de France.</p>
+    <div class="coverage-stats fade-in">
+      <div class="coverage-stat">
+        <div class="coverage-stat-num">99%</div>
+        <div class="coverage-stat-label">Population couverte</div>
+      </div>
+      <div class="coverage-stat">
+        <div class="coverage-stat-num">5G</div>
+        <div class="coverage-stat-label">Technologie réseau</div>
+      </div>
+      <div class="coverage-stat">
+        <div class="coverage-stat-num">2s</div>
+        <div class="coverage-stat-label">Activation eSIM</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ESIM BANNER -->
+
+<section class="esim-section">
+  <div class="esim-banner fade-in">
+    <div>
+      <div class="esim-banner-title">eSIM. Gratuite.<br>Instantanée.</div>
+      <p class="esim-banner-sub">Plus besoin d'attendre une carte SIM. Scannez un QR code, et c'est activé. Compatible iPhone XS et ultérieur, et la plupart des Android récents.</p>
+    </div>
+    <div class="esim-graphic">
+      <div class="esim-chip"></div>
+      <span>eSIM</span>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+
+<section class="faq-section" id="faq">
+  <div class="section-header fade-in">
+    <p class="section-eyebrow">FAQ</p>
+    <h2 class="section-title">Questions fréquentes.</h2>
+  </div>
+
+  <div class="faq-list fade-in">
+    <div class="faq-item">
+      <div class="faq-question">
+        Mon téléphone est-il compatible eSIM ?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">La plupart des smartphones récents supportent l'eSIM : iPhone XS et ultérieur, Samsung Galaxy S20+, Google Pixel 3 et plus. Consultez les paramètres de votre appareil pour vérifier.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question">
+        Comment activer mon eSIM NexaMobile ?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Après souscription, vous recevrez un QR code par email. Scannez-le dans les réglages de votre téléphone, et votre ligne est active en moins de 2 minutes.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question">
+        Puis-je garder mon numéro actuel ?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Oui, la portabilité est gratuite et rapide. Lors de la souscription, indiquez votre numéro RIO (disponible en appelant le 3179) et nous gérons tout.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question">
+        Y a-t-il des frais de résiliation ?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Aucun. Nos forfaits sont sans engagement. Vous pouvez résilier à tout moment depuis votre espace client, sans frais ni délai de préavis caché.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question">
+        Que se passe-t-il si je dépasse mon enveloppe data ?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Votre connexion data est bridée à 512 kbps jusqu'à la prochaine échéance mensuelle. Les appels et SMS restent toujours illimités.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
 
 <footer>
-    <p class="copyright">© 2026 NEXA GAME</p>
-    <p class="legal">All product names, logos, trademarks, and registered trademarks belong to their respective owners.
-Use of these names and trademarks does not imply any affiliation with or endorsement by them.</p>
-    <p class="legal">Developed with passion for the community.</p>
-    <p class="credits">Design & Engine by <strong>Enzo445</strong> • Version 1.2.5</p>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span style="font-size:20px;font-weight:700;letter-spacing:-0.5px;">NexaMobile</span>
+      <p>La connectivité mobile repensée. Simple, rapide, sans engagement. Uniquement en eSIM.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Forfaits</h4>
+      <ul>
+        <li><a href="#">Néon — 7,99 €</a></li>
+        <li><a href="#">Nova — 16,99 €</a></li>
+        <li><a href="#">Zénith — 19,99 €</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#">Centre d'aide</a></li>
+        <li><a href="#">Activer l'eSIM</a></li>
+        <li><a href="#">Portabilité</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Légal</h4>
+      <ul>
+        <li><a href="#">CGV</a></li>
+        <li><a href="#">Mentions légales</a></li>
+        <li><a href="#">Confidentialité</a></li>
+        <li><a href="#">Cookies</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>Copyright © 2025 NexaMobile SAS. Tous droits réservés.</p>
+    <p>Opérateur virtuel · eSIM uniquement · Sans engagement</p>
+  </div>
 </footer>
 
-<div class="modal-overlay" id="modalOverlay" onclick="if(event.target==this)closeModal()">
-    <div class="modal">
-        <div class="modal-header">
-            <h2 id="modalTitle"></h2>
-            <div class="meta">
-                <span id="modalCategory"></span>
-                <span id="modalDeveloper"></span>
-                <span id="modalVersion"></span>
-                <span id="modalSize"></span>
-            </div>
-        </div>
-        <div class="modal-body" id="modalBody"></div>
-        <div class="modal-footer">
-            <button id="modalDownload" class="btn btn-primary">Télécharger PKG</button>
-            <button class="btn btn-close" onclick="closeModal()">Fermer</button>
-        </div>
-    </div>
-</div>
-
 <script>
-    // ============================================
-    // SYSTÈME D'ERREURS NX-XXX
-    // ============================================
-    function showError(code, message) {
-        var errorBanner = document.createElement('div');
-        errorBanner.className = 'error-banner';
-        errorBanner.innerHTML = '<div class="error-code">NX-' + code + '</div><div class="error-message">' + message + '</div>';
-        document.body.appendChild(errorBanner);
-        
-        setTimeout(function() {
-            if (errorBanner.parentNode) {
-                errorBanner.parentNode.removeChild(errorBanner);
-            }
-        }, 8000);
-    }
-    
-    // ============================================
-    // BASE DE DONNÉES DES APPS/OUTILS/THÈMES
-    // ============================================
-    const apps = [
-        {
-    name: "Icon Mask",
-    developer: "Lapy",
-    category: "tools",
-    version: "v1.0",
-    size: "71 MB",
-    icon: "\uD83C\uDFAD",
-    color: "#d9c231",
-    description: "Modifiez l'apparence des icônes de vos jeux et applications. Cet outil permet d'appliquer des masques de formes sur toutes vos icônes pour créer un thème unique et harmonisé sur l'ensemble de votre menu PS4.",
-    features: [
-                "Personnalisation : Modification profonde de l'apparence du menu",
-                "Masquage : Application de formes variées (cercles, étoiles, arrondis)",
-                "Compatibilité : Support complet des firmwares 5.05 à 11.00",
-                "Harmonisation : Rendu uniforme pour les apps système et homebrews",
-                "Simplicité : Activation via GoldHEN sans redémarrage"
-    ],
-    download: "https://archive.org/download/apple-tv_202602/icon-mask.pkg",
-    requirements: ""
-},
-        {
-    name: "PS2 Legacy Dynamic Theme",
-    developer: "Truant Pixel.",
-    category: "themes",
-    version: "v1.0",
-    size: "12,9 MB",
-    icon: "\uD83D\uDDA5",
-    color: "#A246FF",
-    description: "Transformez votre PS4 en console rétro avec ce thème dynamique rendant hommage à la PlayStation 2. Il reproduit fidèlement l'interface culte avec ses tours de données, ses nuages bleus mouvants et les effets sonores originaux de l'époque.",
-    features: [
-                "Dynamic Background : Nuages et cristaux animés en temps réel.",
-                "Original Sounds : Sons de navigation et démarrage de la PS2.",
-                "Custom Icons : Icônes système modifiées pour un look rétro.",
-                "Full HD : Optimisé pour un rendu net sur tous les écrans."
-    ],
-    download: "https://archive.org/download/apple-tv_202602/ps2-legacy-theme.pkg",
-    requirements: "Firmware 5.05 à 12.52 / GoldHEN activé"
-},
-        {
-    name: "PKGi",
-    developer: "ThoeryWrong",
-    category: "apps",
-    version: "v1.0",
-    size: "3,3 MB",
-    icon: "\uD83D\uDCE6",
-    color: "#A93226",
-    description: "PKGi est une application qui permet de télécharger et d'installer des applications, des mises à jour et des DLC directement depuis votre console. Plus besoin de passer par un PC ou une clé USB pour enrichir votre bibliothèque de jeux.",
-    features: [
-                "Direct Download : Téléchargement en arrière-plan sur la console.",
-                "Large Library : Accès aux applications et contenus additionnels.",
-                "Auto-Install : Installation automatique des fichiers après téléchargement.",
-                "Update Check : Vérification des mises à jour disponibles.",
-                "Simple UI : Interface fluide pour une navigation facile."
-    ],
-    download: "https://archive.org/download/apple-tv_202602/pkgi.pkg",
-    requirements: "Firmware 5.05 à 12.52 / GoldHEN v2.4b18.7 ou supérieur"
-},
-        {
-    name: "Apollo Save Tool",
-    developer: "Bucanero",
-    category: "tools",
-    version: "v1.0",
-    size: "16,1 MB",
-    icon: "\uD83D\uDEE0",
-    color: "#0b18d6",
-    description: "Apollo Save Tool est un utilitaire complet pour gérer vos sauvegardes PS4. Il permet de télécharger des saves à 100%, d'appliquer des codes de triche et de re-signer des fichiers tiers pour les rendre compatibles avec votre compte. Un outil indispensable pour modifier vos données et débloquer vos trophées en toute simplicité.",
-    features: [
-                "Gestion des sauvegardes : Accès et gestion de toutes vos sauvegardes PS4.",
-                "Resign & Signature : Ré-attribution des sauvegardes à votre propre profil.",
-                "Gestion des trophées : Outils pour débloquer ou gérer vos trophées localement.",
-                "Base de données : Téléchargement de sauvegardes et de codes de triche en ligne.",
-                "Édition de données : Modification des fichiers système et des paramètres.",
-                "Transfert USB : Importation et exportation rapide via clé USB."
-    ],
-    download: "https://archive.org/download/apple-tv_202602/apollo-save-tools.pkg",
-    requirements: "Firmware 5.05 à 12.52 / GoldHEN v2.4b18.7 ou supérieur"
-},
-        {
-            name: "GoldHEN Cheats Manager",
-            developer: "GoldHEN Team",
-            category: "tools",
-            version: "v1.0",
-            size: "16.8 MB",
-            icon: "\uD83C\uDFAE",
-            color: "#4CAF50",
-            description: "Le gestionnaire de triche ultime pour GoldHEN. Cette application officielle vous permet de parcourir, télécharger et activer des codes de triche (cheats) pour des milliers de jeux PS4 directement depuis votre console.",
-            features: [
-                "Base de données intégrée : Accès à des milliers de codes de triche pour jeux PS4",
-                "Mise à jour automatique : Téléchargement des derniers cheats via internet en un clic",
-                "Installation simplifiée : Installation directe des fichiers .json et .sh au bon endroit",
-                "Recherche par ID : Trouvez vos jeux instantanément via leur code CUSA",
-                "Support GoldHEN : Compatibilité parfaite avec le menu Cheat Menu",
-                "Mode hors-ligne : Gérez vos cheats installés sans avoir besoin de connexion"
-            ],
-            download: "https://archive.org/download/apple-tv_202602/goldhen-cheat.pkg",
-            requirements: "Firmware 9.00 à 12.52 / GoldHEN v2.0 ou supérieur"
-        },
-        {
-            name: "PS4-Xplorer",
-            developer: "CelesteBlue",
-            category: "tools",
-            version: "v1.0",
-            size: "65 MB",
-            icon: "\uD83D\uDCC1",
-            color: "#FF5722",
-            description: "Le gestionnaire de fichiers n°1 pour PS4. Permet d'explorer, copier, déplacer et supprimer vos fichiers directement sur la console.",
-            features: [
-                "Explorateur complet : Navigation dans tous les répertoires système",
-                "Support Multi-format : Lecture images, vidéos, documents",
-                "Installation PKG : Installez vos packages depuis n'importe où",
-                "Extraction Archive : Support ZIP, RAR, 7Z",
-                "Éditeur de texte : Modifiez vos fichiers de configuration",
-                "FTP Intégré : Serveur FTP pour transferts PC ↔ PS4"
-            ],
-            download: "https://archive.org/download/apple-tv_202602/ps4xplorer.pkg",
-            requirements: "Firmware 5.05 à 12.52"
-        },
-        {
-            name: "Itemzflow Game Manager",
-            developer: "LightningMods",
-            category: "apps",
-            version: "v1.0",
-            size: "25.5 MB",
-            icon: "\uD83D\uDCBE",
-            color: "#9C27B0",
-            description: "ItemzFlow est une alternative gratuite et Open Source au menu d'accueil (ShellUI) de la PS4. Bien plus qu'un simple lanceur, il repousse les limites imposées par Sony pour offrir une expérience totalement personnalisée et ultra-complète.",
-            features: [
-                "Lanceur de jeux : Interface fluide avec jaquettes et catégories",
-                "Store intégré : Téléchargement de thèmes et d'outils directement",
-                "Gestion mémoire : Surveillance et optimisation de la RAM",
-                "Dump de jeux : Copie de vos disques vers le disque dur en un clic",
-                "Contrôle ventilateur : Ajustement manuel de la vitesse du ventilateur",
-                "Overlay FPS : Affichage des images par seconde en plein jeu"
-            ],
-            download: "https://archive.org/download/apple-tv_202602/itemzflox-manager.pkg",
-            requirements: "Firmware 9.00 à 12.52 / GoldHEN v2.3 ou supérieur"
-        },
-        {
-            name: "WebMAN MOD",
-            developer: "aldostools",
-            category: "tools",
-            version: "v1.0",
-            size: "2 MB",
-            icon: "\uD83C\uDF10",
-            color: "#673AB7",
-            description: "L'outil système le plus puissant pour PS4. Montage ISO, gestion ventilateur, température, FTP, serveur web, backup. L'indispensable pour PS4 jailbreakée.",
-            features: [
-                "Montage de jeux : Support ISO et dossiers de jeux",
-                "Contrôle ventilateur : Gestion manuelle de la vitesse",
-                "Serveur FTP : Transferts de fichiers rapides",
-                "Interface web : Gestion à distance depuis votre navigateur",
-                "Backup de jeux : Sauvegarde de vos jeux et sauvegardes",
-                "Monitoring : Affichage température CPU/GPU en temps réel"
-            ],
-            download: "https://archive.org/download/apple-tv_202602/webman-mod.pkg",
-            requirements: "Firmware 5.05 à 12.52 / GoldHEN ou HEN"
-        },
-        {
-            name: "Apple TV",
-            developer: "Apple Inc.",
-            category: "apps",
-            version: "v1.0",
-            size: "126 MB",
-            icon: "\uD83C\uDFAC",
-            color: "#000000",
-            description: "Apple TV est un service de streaming proposant des centaines de séries et films exclusifs – dramas captivants, sagas fantastiques, comédies réconfortantes et plus encore – avec des nouveautés chaque semaine.",
-            features: [
-                "Lecture de films et séries : Contenu Apple TV+ original",
-                "Catalogue complet : Accès à tous les contenus disponibles",
-                "Interface intuitive : Navigation fluide et rapide",
-                "Synchronisation : Continuez sur vos autres appareils Apple",
-                "Qualité HD/4K : Streaming haute définition",
-                "Sous-titres : Support multi-langues"
-            ],
-            download: "https://archive.org/download/apple-tv_202602/apple-tv.pkg",
-            requirements: "Firmware 5.05 à 12.52 / Abonnement Apple TV+ requis"
-        },
-        {
-            name: "PS4 Temperature Monitor",
-            developer: "Storm21CH",
-            category: "tools",
-            version: "v1.0",
-            size: "48 MB",
-            icon: "\uD83C\uDF21",
-            color: "#00d2ff",
-            description: "Un utilitaire indispensable pour surveiller la santé de votre console en temps réel. Évitez la surchauffe et prolongez la durée de vie de votre PS4.",
-            features: [
-                "Affichage en temps réel : Température CPU et GPU",
-                "Alertes de surchauffe : Notifications automatiques",
-                "Monitoring discret : Interface overlay non-intrusive",
-                "Historique : Graphiques de température sur 24h",
-                "Ventilateur : Vitesse actuelle et contrôle manuel",
-                "Économie d'énergie : Mode performance ou silencieux"
-            ],
-            download: "https://archive.org/download/apple-tv_202602/ps4-temperature.pkg",
-            requirements: "Firmware 5.05 à 12.52"
-        },
-        {
-            name: "Uncharted & Tomb Raider Theme",
-            developer: "Latioboy",
-            category: "themes",
-            version: "v1.0",
-            size: "14.4 MB",
-            icon: "\uD83E\uDDED",
-            color: "#D4A574",
-            description: "Un thème dynamique magnifique inspiré des univers d'Uncharted et Tomb Raider. Transformez votre menu PS4 avec des visuels épiques.",
-            features: [
-                "Design Dual Universe : Fusion parfaite des deux licences",
-                "Icônes personnalisées : Interface complète redessinée",
-                "Fond d'écran HD : Visuels haute résolution",
-                "Ambiance sonore : Musiques emblématiques des deux jeux",
-                "Animations : Effets dynamiques au survol",
-                "Compatibilité : Fonctionne sur tous les firmwares"
-            ],
-            download: "https://archive.org/download/apple-tv_202602/uncharted-tomb-r-theme.pkg",
-            requirements: "Firmware 5.05 à 12.52"
-        }
-    ];
-
-    let filteredApps = [...apps];
-    let currentFilter = 'all';
-    let currentApp = null;
-
-    function fixGitHubLink(url) {
-        if (!url) return url;
-        if (url.includes('github.com') && url.includes('/blob/')) {
-            return url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
-        }
-        return url;
-    }
-
-    function render() {
-        try {
-            const grid = document.getElementById('mainGrid');
-            
-            if (!grid) {
-                showError('100', 'Erreur de synchronisation : Élément mainGrid introuvable dans le DOM.');
-                return;
-            }
-            
-            grid.innerHTML = filteredApps.map((app, index) => `
-                <div class="card" onclick="openModal(${filteredApps.indexOf(app)})">
-                    <div class="card-cover" style="background: linear-gradient(135deg, ${app.color}20, ${app.color}05);">
-                        <div style="font-size: 60px;">${app.icon}</div>
-                        <div class="badge">${app.category}</div>
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">${app.name}</div>
-                        <div class="card-desc">${app.description.substring(0, 80)}...</div>
-                    </div>
-                </div>
-            `).join('');
-            
-            const count = filteredApps.length;
-            document.getElementById('count').innerText = `Contenu : ${count} élément${count > 1 ? 's' : ''}`;
-        } catch (e) {
-            showError('100', 'Erreur de synchronisation lors du rendu : ' + e.message);
-        }
-    }
-
-    function filterCategory(category) {
-        currentFilter = category;
-        
-        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-        event.target.classList.add('active');
-        
-        if (category === 'all') {
-            filteredApps = [...apps];
-        } else {
-            filteredApps = apps.filter(app => app.category === category);
-        }
-        
-        render();
-    }
-
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-        const val = e.target.value.toLowerCase();
-        
-        if (currentFilter === 'all') {
-            filteredApps = apps.filter(app => 
-                app.name.toLowerCase().includes(val) ||
-                app.description.toLowerCase().includes(val) ||
-                app.developer.toLowerCase().includes(val) ||
-                app.features.some(f => f.toLowerCase().includes(val))
-            );
-        } else {
-            filteredApps = apps.filter(app => 
-                app.category === currentFilter &&
-                (app.name.toLowerCase().includes(val) || 
-                 app.description.toLowerCase().includes(val) ||
-                 app.developer.toLowerCase().includes(val) ||
-                 app.features.some(f => f.toLowerCase().includes(val)))
-            );
-        }
-        
-        render();
+  // Intersection Observer for fade-in animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
     });
+  }, { threshold: 0.1 });
 
-    function openModal(index) {
-        currentApp = filteredApps[index];
-        
-        document.getElementById('modalTitle').innerText = currentApp.name;
-        document.getElementById('modalCategory').innerText = currentApp.category.toUpperCase();
-        document.getElementById('modalDeveloper').innerText = `Par ${currentApp.developer}`;
-        document.getElementById('modalVersion').innerText = currentApp.version;
-        document.getElementById('modalSize').innerText = currentApp.size;
-        
-        const featuresHTML = currentApp.features.map(f => `<li>${f}</li>`).join('');
-        
-        let bodyHTML = `
-            <div class="developer-info">
-                Développeur : <strong>${currentApp.developer}</strong>
-            </div>
-            
-            <h3>Description</h3>
-            <p>${currentApp.description}</p>
-            
-            <h3>Caractéristiques</h3>
-            <ul>${featuresHTML}</ul>
-        `;
-        
-        if (currentApp.category === 'themes') {
-            bodyHTML += `
-                <div class="theme-instruction">
-                    <h3 style="margin-top: 0;">Instruction d'Installation</h3>
-                    <p style="margin-bottom: 0;">
-                        1. Installez le fichier PKG via le Package Installer<br>
-                        2. Allez dans <strong>Paramètres → Thèmes</strong><br>
-                        3. Sélectionnez le thème pour l'appliquer
-                    </p>
-                </div>
-            `;
-        }
-        
-        
-        
-        document.getElementById('modalBody').innerHTML = bodyHTML;
-        
-        const downloadBtn = document.getElementById('modalDownload');
-        
-        if (currentApp.category === 'themes') {
-            downloadBtn.innerHTML = 'Télécharger le Thème (PKG)';
-        } else {
-            downloadBtn.innerHTML = 'Télécharger PKG';
-        }
-        
-        downloadBtn.onclick = function(e) {
-            e.preventDefault();
-            
-            // NX-380 : Vérification du lien PKG
-            if (!currentApp.download || currentApp.download.trim() === '') {
-                showError('380', 'Lien PKG mort ou impossible d\'accès : Aucune URL de téléchargement disponible pour "' + currentApp.name + '".');
-                return;
-            }
-            
-            try {
-                const correctedUrl = fixGitHubLink(currentApp.download);
-                const link = document.createElement('a');
-                link.href = correctedUrl;
-                link.download = currentApp.name.replace(/\s+/g, '-') + '.pkg';
-                link.target = '_blank';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            } catch (error) {
-                // NX-560 : Erreur de téléchargement
-                showError('560', 'Erreur de téléchargement : Impossible de démarrer le téléchargement pour "' + currentApp.name + '". Détails : ' + error.message);
-            }
-        };
-        
-        document.getElementById('modalOverlay').classList.add('active');
-    }
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-    function closeModal() {
-        document.getElementById('modalOverlay').classList.remove('active');
-    }
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeModal();
+  // FAQ accordion
+  document.querySelectorAll('.faq-question').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
     });
+  });
 
-    render();
+  // Nav active state on scroll
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.background = window.scrollY > 40
+      ? 'rgba(255,255,255,0.88)'
+      : 'rgba(255,255,255,0.82)';
+  });
 </script>
+
 </body>
 </html>
