@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXA STORE - PS4 Homebrew</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --ps5-blue: #0070cc; --ps5-white: #ffffff; --accent: #00d4ff; }
+        body { background: radial-gradient(circle at top right, #1a1a2e, #0a0a0a); color: var(--ps5-white); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* ERROR BANNER NX-XXX */
+        .error-banner {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(220, 20, 60, 0.95);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            border: 2px solid #ff4444;
+            box-shadow: 0 10px 40px rgba(220, 20, 60, 0.5);
+            z-index: 10000;
+            max-width: 90%;
+            text-align: center;
+            animation: slideDown 0.5s ease-out;
+        }
+        
+        .error-banner .error-code {
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            letter-spacing: 3px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .error-banner .error-message {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        @keyframes slideDown {
+            from { top: -100px; opacity: 0; }
+            to { top: 20px; opacity: 1; }
+        }
+        
+        /* HEADER */
+        header { 
+            background: rgba(0, 0, 0, 0.7); 
+            backdrop-filter: blur(20px); 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+            padding: 25px 50px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between;
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            gap: 30px;
+        }
+        
+        .logo { 
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+        
+        .search-box { flex: 1; max-width: 600px; }
+        .search-box input { width: 100%; padding: 14px 28px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50px; color: white; outline: none; transition: 0.3s; font-size: 14px; }
+        .search-box input:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(0, 212, 255, 0.4); }
+        
+        .header-info { display: flex; gap: 20px; align-items: center; white-space: nowrap; }
+        .count { font-size: 13px; opacity: 0.7; }
+        .version { font-size: 13px; opacity: 0.6; background: rgba(255, 255, 255, 0.1); padding: 6px 14px; border-radius: 15px; }
+
+        /* TABS */
+        .tabs { display: flex; gap: 12px; padding: 25px 50px; flex-wrap: wrap; }
+        .tab { padding: 12px 24px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; cursor: pointer; transition: 0.3s; font-size: 14px; }
+        .tab.active { background: var(--ps5-blue); border-color: var(--accent); }
+        .tab:hover { border-color: var(--accent); }
+
+        /* MAIN CONTENT */
+        .main-wrapper { flex: 1; }
+        .container { padding: 30px 50px; max-width: 1600px; margin: 0 auto; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 25px; margin-bottom: 60px; }
+        
+        /* CARDS */
+        .card { background: rgba(255, 255, 255, 0.05); border-radius: 15px; overflow: hidden; transition: 0.4s; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; }
+        .card:hover { transform: translateY(-10px); border-color: var(--accent); background: rgba(255, 255, 255, 0.1); box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3); }
+        .card-cover { width: 100%; aspect-ratio: 16/9; background-size: contain; background-position: center; background-repeat: no-repeat; background-color: #1a1a2e; position: relative; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .badge { position: absolute; top: 10px; right: 10px; background: var(--ps5-blue); padding: 4px 10px; border-radius: 5px; font-size: 10px; font-weight: bold; text-transform: uppercase; }
+        .card-info { padding: 15px; }
+        .card-title { font-size: 14px; font-weight: bold; margin-bottom: 5px; }
+        .card-desc { font-size: 11px; color: rgba(255, 255, 255, 0.6); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+        /* MODAL */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(10px); padding: 20px; overflow-y: auto; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: #1a1a1a; width: 100%; max-width: 900px; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); max-height: 90vh; display: flex; flex-direction: column; margin: auto; }
+        .modal-header { padding: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .modal-header h2 { font-size: 28px; margin-bottom: 10px; }
+        .modal-header .meta { display: flex; gap: 15px; font-size: 13px; opacity: 0.7; flex-wrap: wrap; }
+        .modal-body { padding: 30px; overflow-y: auto; flex: 1; }
+        .modal-body h3 { color: var(--accent); margin: 20px 0 15px 0; font-size: 18px; }
+        .modal-body h3:first-child { margin-top: 0; }
+        .modal-body p { line-height: 1.8; margin-bottom: 15px; opacity: 0.9; }
+        .modal-body ul { margin-left: 20px; line-height: 2; opacity: 0.9; margin-bottom: 15px; }
+        .developer-info { background: rgba(0, 112, 204, 0.1); border-left: 3px solid var(--ps5-blue); padding: 12px 15px; margin: 15px 0; border-radius: 5px; font-size: 14px; }
+        .theme-instruction { background: rgba(0, 212, 255, 0.1); border-left: 3px solid var(--accent); padding: 15px; margin: 15px 0; border-radius: 5px; }
+        .modal-footer { padding: 25px 30px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 12px; flex-wrap: wrap; }
+        .btn { padding: 16px 32px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; border: none; font-size: 15px; text-align: center; text-decoration: none; display: inline-block; white-space: nowrap; flex: 1; min-width: 200px; }
+        .btn-primary { background: var(--ps5-blue); color: white; }
+        .btn-primary:hover { background: #0084ff; transform: scale(1.02); }
+        .btn-close { background: #333; color: white; }
+        .btn-close:hover { background: #444; }
+
+        /* FOOTER STYLE PLAYSTATION */
+        footer {
+            background: rgba(0, 0, 0, 0.9);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 30px 50px;
+            text-align: center;
+            font-size: 11px;
+            line-height: 1.8;
+            color: #888;
+            font-weight: 300;
+        }
+        footer p { margin: 8px 0; }
+        footer .copyright { color: #999; font-size: 12px; font-weight: 400; margin-bottom: 10px; }
+        footer .legal { color: #666; font-size: 10px; }
+        footer .credits { margin-top: 12px; color: #777; font-size: 10px; opacity: 0.8; }
+        footer .credits strong { color: var(--accent); font-weight: 600; }
+
+        /* RESPONSIVE */
+        @media (max-width: 968px) {
+            header { flex-direction: column; align-items: stretch; padding: 20px; gap: 15px; }
+            .logo { text-align: center; font-size: 22px; }
+            .search-box { max-width: 100%; }
+            .header-info { justify-content: center; }
+            .tabs, .container { padding: 20px; }
+            .modal-footer { flex-direction: column; }
+            .btn { min-width: 100%; }
+            footer { padding: 25px 20px; font-size: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+   <div class="logo">
+    <img src="logo.PNG" alt="NEXA" style="height: 60px; width: auto; vertical-align: middle;">
+</div>
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Rechercher des apps, thèmes, outils...">
+    </div>
+    <div class="header-info">
+        <div class="count" id="count">Contenu : 0 élément</div>
+        <div class="version">V1.2.5</div>
+    </div>
+</header>
+   <div style="padding: 0 50px; margin-top: 20px;">
+    <div style="
+        background: #1a1a1a; 
+        border: 1px solid #333; 
+        color: #888; 
+        padding: 8px 20px; 
+        border-radius: 50px; 
+        font-size: 13px;
+        display: inline-block;
+        font-family: sans-serif;">
+        Nécessite <span style="; font-weight: bold;">GoldHEN</span> — Firmware <strong>5.05 à 12.52</strong>
+    </div>
+</div>
+
+<div class="tabs">
+    <div class="tab active" onclick="filterCategory('all')">Tous</div>
+    <div class="tab" onclick="filterCategory('apps')">Applications</div>
+    <div class="tab" onclick="filterCategory('tools')">Outils</div>
+    <div class="tab" onclick="filterCategory('themes')">Thèmes</div>
+</div>
+
+<div class="main-wrapper">
+    <div class="container">
+        <div class="grid" id="mainGrid"></div>
+    </div>
+</div>
+
+<footer>
+    <p class="copyright">© 2026 NEXA GAME</p>
+    <p class="legal">All product names, logos, trademarks, and registered trademarks belong to their respective owners.
+Use of these names and trademarks does not imply any affiliation with or endorsement by them.</p>
+    <p class="legal">Developed with passion for the community.</p>
+    <p class="credits">Design & Engine by <strong>Enzo445</strong> • Version 1.2.5</p>
+</footer>
+
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target==this)closeModal()">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="modalTitle"></h2>
+            <div class="meta">
+                <span id="modalCategory"></span>
+                <span id="modalDeveloper"></span>
+                <span id="modalVersion"></span>
+                <span id="modalSize"></span>
+            </div>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+        <div class="modal-footer">
+            <button id="modalDownload" class="btn btn-primary">Télécharger PKG</button>
+            <button class="btn btn-close" onclick="closeModal()">Fermer</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ============================================
+    // SYSTÈME D'ERREURS NX-XXX
+    // ============================================
+    function showError(code, message) {
+        var errorBanner = document.createElement('div');
+        errorBanner.className = 'error-banner';
+        errorBanner.innerHTML = '<div class="error-code">NX-' + code + '</div><div class="error-message">' + message + '</div>';
+        document.body.appendChild(errorBanner);
+        
+        setTimeout(function() {
+            if (errorBanner.parentNode) {
+                errorBanner.parentNode.removeChild(errorBanner);
+            }
+        }, 8000);
+    }
+    
+    // ============================================
+    // BASE DE DONNÉES DES APPS/OUTILS/THÈMES
+    // ============================================
+    const apps = [
+        {
+    name: "Icon Mask",
+    developer: "Lapy",
+    category: "tools",
+    version: "v1.0",
+    size: "71 MB",
+    icon: "\uD83C\uDFAD",
+    color: "#d9c231",
+    description: "Modifiez l'apparence des icônes de vos jeux et applications. Cet outil permet d'appliquer des masques de formes sur toutes vos icônes pour créer un thème unique et harmonisé sur l'ensemble de votre menu PS4.",
+    features: [
+                "Personnalisation : Modification profonde de l'apparence du menu",
+                "Masquage : Application de formes variées (cercles, étoiles, arrondis)",
+                "Compatibilité : Support complet des firmwares 5.05 à 11.00",
+                "Harmonisation : Rendu uniforme pour les apps système et homebrews",
+                "Simplicité : Activation via GoldHEN sans redémarrage"
+    ],
+    download: "https://archive.org/download/apple-tv_202602/icon-mask.pkg",
+    requirements: ""
+},
+        {
+    name: "PS2 Legacy Dynamic Theme",
+    developer: "Truant Pixel.",
+    category: "themes",
+    version: "v1.0",
+    size: "12,9 MB",
+    icon: "\uD83D\uDDA5",
+    color: "#A246FF",
+    description: "Transformez votre PS4 en console rétro avec ce thème dynamique rendant hommage à la PlayStation 2. Il reproduit fidèlement l'interface culte avec ses tours de données, ses nuages bleus mouvants et les effets sonores originaux de l'époque.",
+    features: [
+                "Dynamic Background : Nuages et cristaux animés en temps réel.",
+                "Original Sounds : Sons de navigation et démarrage de la PS2.",
+                "Custom Icons : Icônes système modifiées pour un look rétro.",
+                "Full HD : Optimisé pour un rendu net sur tous les écrans."
+    ],
+    download: "https://archive.org/download/apple-tv_202602/ps2-legacy-theme.pkg",
+    requirements: "Firmware 5.05 à 12.52 / GoldHEN activé"
+},
+        {
+    name: "PKGi",
+    developer: "ThoeryWrong",
+    category: "apps",
+    version: "v1.0",
+    size: "3,3 MB",
+    icon: "\uD83D\uDCE6",
+    color: "#A93226",
+    description: "PKGi est une application qui permet de télécharger et d'installer des applications, des mises à jour et des DLC directement depuis votre console. Plus besoin de passer par un PC ou une clé USB pour enrichir votre bibliothèque de jeux.",
+    features: [
+                "Direct Download : Téléchargement en arrière-plan sur la console.",
+                "Large Library : Accès aux applications et contenus additionnels.",
+                "Auto-Install : Installation automatique des fichiers après téléchargement.",
+                "Update Check : Vérification des mises à jour disponibles.",
+                "Simple UI : Interface fluide pour une navigation facile."
+    ],
+    download: "https://archive.org/download/apple-tv_202602/pkgi.pkg",
+    requirements: "Firmware 5.05 à 12.52 / GoldHEN v2.4b18.7 ou supérieur"
+},
+        {
+    name: "Apollo Save Tool",
+    developer: "Bucanero",
+    category: "tools",
+    version: "v1.0",
+    size: "16,1 MB",
+    icon: "\uD83D\uDEE0",
+    color: "#0b18d6",
+    description: "Apollo Save Tool est un utilitaire complet pour gérer vos sauvegardes PS4. Il permet de télécharger des saves à 100%, d'appliquer des codes de triche et de re-signer des fichiers tiers pour les rendre compatibles avec votre compte. Un outil indispensable pour modifier vos données et débloquer vos trophées en toute simplicité.",
+    features: [
+                "Gestion des sauvegardes : Accès et gestion de toutes vos sauvegardes PS4.",
+                "Resign & Signature : Ré-attribution des sauvegardes à votre propre profil.",
+                "Gestion des trophées : Outils pour débloquer ou gérer vos trophées localement.",
+                "Base de données : Téléchargement de sauvegardes et de codes de triche en ligne.",
+                "Édition de données : Modification des fichiers système et des paramètres.",
+                "Transfert USB : Importation et exportation rapide via clé USB."
+    ],
+    download: "https://archive.org/download/apple-tv_202602/apollo-save-tools.pkg",
+    requirements: "Firmware 5.05 à 12.52 / GoldHEN v2.4b18.7 ou supérieur"
+},
+        {
+            name: "GoldHEN Cheats Manager",
+            developer: "GoldHEN Team",
+            category: "tools",
+            version: "v1.0",
+            size: "16.8 MB",
+            icon: "\uD83C\uDFAE",
+            color: "#4CAF50",
+            description: "Le gestionnaire de triche ultime pour GoldHEN. Cette application officielle vous permet de parcourir, télécharger et activer des codes de triche (cheats) pour des milliers de jeux PS4 directement depuis votre console.",
+            features: [
+                "Base de données intégrée : Accès à des milliers de codes de triche pour jeux PS4",
+                "Mise à jour automatique : Téléchargement des derniers cheats via internet en un clic",
+                "Installation simplifiée : Installation directe des fichiers .json et .sh au bon endroit",
+                "Recherche par ID : Trouvez vos jeux instantanément via leur code CUSA",
+                "Support GoldHEN : Compatibilité parfaite avec le menu Cheat Menu",
+                "Mode hors-ligne : Gérez vos cheats installés sans avoir besoin de connexion"
+            ],
+            download: "https://archive.org/download/apple-tv_202602/goldhen-cheat.pkg",
+            requirements: "Firmware 9.00 à 12.52 / GoldHEN v2.0 ou supérieur"
+        },
+        {
+            name: "PS4-Xplorer",
+            developer: "CelesteBlue",
+            category: "tools",
+            version: "v1.0",
+            size: "65 MB",
+            icon: "\uD83D\uDCC1",
+            color: "#FF5722",
+            description: "Le gestionnaire de fichiers n°1 pour PS4. Permet d'explorer, copier, déplacer et supprimer vos fichiers directement sur la console.",
+            features: [
+                "Explorateur complet : Navigation dans tous les répertoires système",
+                "Support Multi-format : Lecture images, vidéos, documents",
+                "Installation PKG : Installez vos packages depuis n'importe où",
+                "Extraction Archive : Support ZIP, RAR, 7Z",
+                "Éditeur de texte : Modifiez vos fichiers de configuration",
+                "FTP Intégré : Serveur FTP pour transferts PC ↔ PS4"
+            ],
+            download: "https://archive.org/download/apple-tv_202602/ps4xplorer.pkg",
+            requirements: "Firmware 5.05 à 12.52"
+        },
+        {
+            name: "Itemzflow Game Manager",
+            developer: "LightningMods",
+            category: "apps",
+            version: "v1.0",
+            size: "25.5 MB",
+            icon: "\uD83D\uDCBE",
+            color: "#9C27B0",
+            description: "ItemzFlow est une alternative gratuite et Open Source au menu d'accueil (ShellUI) de la PS4. Bien plus qu'un simple lanceur, il repousse les limites imposées par Sony pour offrir une expérience totalement personnalisée et ultra-complète.",
+            features: [
+                "Lanceur de jeux : Interface fluide avec jaquettes et catégories",
+                "Store intégré : Téléchargement de thèmes et d'outils directement",
+                "Gestion mémoire : Surveillance et optimisation de la RAM",
+                "Dump de jeux : Copie de vos disques vers le disque dur en un clic",
+                "Contrôle ventilateur : Ajustement manuel de la vitesse du ventilateur",
+                "Overlay FPS : Affichage des images par seconde en plein jeu"
+            ],
+            download: "https://archive.org/download/apple-tv_202602/itemzflox-manager.pkg",
+            requirements: "Firmware 9.00 à 12.52 / GoldHEN v2.3 ou supérieur"
+        },
+        {
+            name: "WebMAN MOD",
+            developer: "aldostools",
+            category: "tools",
+            version: "v1.0",
+            size: "2 MB",
+            icon: "\uD83C\uDF10",
+            color: "#673AB7",
+            description: "L'outil système le plus puissant pour PS4. Montage ISO, gestion ventilateur, température, FTP, serveur web, backup. L'indispensable pour PS4 jailbreakée.",
+            features: [
+                "Montage de jeux : Support ISO et dossiers de jeux",
+                "Contrôle ventilateur : Gestion manuelle de la vitesse",
+                "Serveur FTP : Transferts de fichiers rapides",
+                "Interface web : Gestion à distance depuis votre navigateur",
+                "Backup de jeux : Sauvegarde de vos jeux et sauvegardes",
+                "Monitoring : Affichage température CPU/GPU en temps réel"
+            ],
+            download: "https://archive.org/download/apple-tv_202602/webman-mod.pkg",
+            requirements: "Firmware 5.05 à 12.52 / GoldHEN ou HEN"
+        },
+        {
+            name: "Apple TV",
+            developer: "Apple Inc.",
+            category: "apps",
+            version: "v1.0",
+            size: "126 MB",
+            icon: "\uD83C\uDFAC",
+            color: "#000000",
+            description: "Apple TV est un service de streaming proposant des centaines de séries et films exclusifs – dramas captivants, sagas fantastiques, comédies réconfortantes et plus encore – avec des nouveautés chaque semaine.",
+            features: [
+                "Lecture de films et séries : Contenu Apple TV+ original",
+                "Catalogue complet : Accès à tous les contenus disponibles",
+                "Interface intuitive : Navigation fluide et rapide",
+                "Synchronisation : Continuez sur vos autres appareils Apple",
+                "Qualité HD/4K : Streaming haute définition",
+                "Sous-titres : Support multi-langues"
+            ],
+            download: "https://archive.org/download/apple-tv_202602/apple-tv.pkg",
+            requirements: "Firmware 5.05 à 12.52 / Abonnement Apple TV+ requis"
+        },
+        {
+            name: "PS4 Temperature Monitor",
+            developer: "Storm21CH",
+            category: "tools",
+            version: "v1.0",
+            size: "48 MB",
+            icon: "\uD83C\uDF21",
+            color: "#00d2ff",
+            description: "Un utilitaire indispensable pour surveiller la santé de votre console en temps réel. Évitez la surchauffe et prolongez la durée de vie de votre PS4.",
+            features: [
+                "Affichage en temps réel : Température CPU et GPU",
+                "Alertes de surchauffe : Notifications automatiques",
+                "Monitoring discret : Interface overlay non-intrusive",
+                "Historique : Graphiques de température sur 24h",
+                "Ventilateur : Vitesse actuelle et contrôle manuel",
+                "Économie d'énergie : Mode performance ou silencieux"
+            ],
+            download: "https://archive.org/download/apple-tv_202602/ps4-temperature.pkg",
+            requirements: "Firmware 5.05 à 12.52"
+        },
+        {
+            name: "Uncharted & Tomb Raider Theme",
+            developer: "Latioboy",
+            category: "themes",
+            version: "v1.0",
+            size: "14.4 MB",
+            icon: "\uD83E\uDDED",
+            color: "#D4A574",
+            description: "Un thème dynamique magnifique inspiré des univers d'Uncharted et Tomb Raider. Transformez votre menu PS4 avec des visuels épiques.",
+            features: [
+                "Design Dual Universe : Fusion parfaite des deux licences",
+                "Icônes personnalisées : Interface complète redessinée",
+                "Fond d'écran HD : Visuels haute résolution",
+                "Ambiance sonore : Musiques emblématiques des deux jeux",
+                "Animations : Effets dynamiques au survol",
+                "Compatibilité : Fonctionne sur tous les firmwares"
+            ],
+            download: "https://archive.org/download/apple-tv_202602/uncharted-tomb-r-theme.pkg",
+            requirements: "Firmware 5.05 à 12.52"
+        }
+    ];
+
+    let filteredApps = [...apps];
+    let currentFilter = 'all';
+    let currentApp = null;
+
+    function fixGitHubLink(url) {
+        if (!url) return url;
+        if (url.includes('github.com') && url.includes('/blob/')) {
+            return url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
+        }
+        return url;
+    }
+
+    function render() {
+        try {
+            const grid = document.getElementById('mainGrid');
+            
+            if (!grid) {
+                showError('100', 'Erreur de synchronisation : Élément mainGrid introuvable dans le DOM.');
+                return;
+            }
+            
+            grid.innerHTML = filteredApps.map((app, index) => `
+                <div class="card" onclick="openModal(${filteredApps.indexOf(app)})">
+                    <div class="card-cover" style="background: linear-gradient(135deg, ${app.color}20, ${app.color}05);">
+                        <div style="font-size: 60px;">${app.icon}</div>
+                        <div class="badge">${app.category}</div>
+                    </div>
+                    <div class="card-info">
+                        <div class="card-title">${app.name}</div>
+                        <div class="card-desc">${app.description.substring(0, 80)}...</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            const count = filteredApps.length;
+            document.getElementById('count').innerText = `Contenu : ${count} élément${count > 1 ? 's' : ''}`;
+        } catch (e) {
+            showError('100', 'Erreur de synchronisation lors du rendu : ' + e.message);
+        }
+    }
+
+    function filterCategory(category) {
+        currentFilter = category;
+        
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        if (category === 'all') {
+            filteredApps = [...apps];
+        } else {
+            filteredApps = apps.filter(app => app.category === category);
+        }
+        
+        render();
+    }
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        const val = e.target.value.toLowerCase();
+        
+        if (currentFilter === 'all') {
+            filteredApps = apps.filter(app => 
+                app.name.toLowerCase().includes(val) ||
+                app.description.toLowerCase().includes(val) ||
+                app.developer.toLowerCase().includes(val) ||
+                app.features.some(f => f.toLowerCase().includes(val))
+            );
+        } else {
+            filteredApps = apps.filter(app => 
+                app.category === currentFilter &&
+                (app.name.toLowerCase().includes(val) || 
+                 app.description.toLowerCase().includes(val) ||
+                 app.developer.toLowerCase().includes(val) ||
+                 app.features.some(f => f.toLowerCase().includes(val)))
+            );
+        }
+        
+        render();
+    });
+
+    function openModal(index) {
+        currentApp = filteredApps[index];
+        
+        document.getElementById('modalTitle').innerText = currentApp.name;
+        document.getElementById('modalCategory').innerText = currentApp.category.toUpperCase();
+        document.getElementById('modalDeveloper').innerText = `Par ${currentApp.developer}`;
+        document.getElementById('modalVersion').innerText = currentApp.version;
+        document.getElementById('modalSize').innerText = currentApp.size;
+        
+        const featuresHTML = currentApp.features.map(f => `<li>${f}</li>`).join('');
+        
+        let bodyHTML = `
+            <div class="developer-info">
+                Développeur : <strong>${currentApp.developer}</strong>
+            </div>
+            
+            <h3>Description</h3>
+            <p>${currentApp.description}</p>
+            
+            <h3>Caractéristiques</h3>
+            <ul>${featuresHTML}</ul>
+        `;
+        
+        if (currentApp.category === 'themes') {
+            bodyHTML += `
+                <div class="theme-instruction">
+                    <h3 style="margin-top: 0;">Instruction d'Installation</h3>
+                    <p style="margin-bottom: 0;">
+                        1. Installez le fichier PKG via le Package Installer<br>
+                        2. Allez dans <strong>Paramètres → Thèmes</strong><br>
+                        3. Sélectionnez le thème pour l'appliquer
+                    </p>
+                </div>
+            `;
+        }
+        
+        
+        
+        document.getElementById('modalBody').innerHTML = bodyHTML;
+        
+        const downloadBtn = document.getElementById('modalDownload');
+        
+        if (currentApp.category === 'themes') {
+            downloadBtn.innerHTML = 'Télécharger le Thème (PKG)';
+        } else {
+            downloadBtn.innerHTML = 'Télécharger PKG';
+        }
+        
+        downloadBtn.onclick = function(e) {
+            e.preventDefault();
+            
+            // NX-380 : Vérification du lien PKG
+            if (!currentApp.download || currentApp.download.trim() === '') {
+                showError('380', 'Lien PKG mort ou impossible d\'accès : Aucune URL de téléchargement disponible pour "' + currentApp.name + '".');
+                return;
+            }
+            
+            try {
+                const correctedUrl = fixGitHubLink(currentApp.download);
+                const link = document.createElement('a');
+                link.href = correctedUrl;
+                link.download = currentApp.name.replace(/\s+/g, '-') + '.pkg';
+                link.target = '_blank';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } catch (error) {
+                // NX-560 : Erreur de téléchargement
+                showError('560', 'Erreur de téléchargement : Impossible de démarrer le téléchargement pour "' + currentApp.name + '". Détails : ' + error.message);
+            }
+        };
+        
+        document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function closeModal() {
+        document.getElementById('modalOverlay').classList.remove('active');
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+    });
+
+    render();
+</script>
+</body>
+</html>
