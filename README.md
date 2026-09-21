@@ -47,7 +47,7 @@ Nexa Store n'est pas qu'un simple projet, c'est une aventure qui grandit grâce 
 * 🛠️ **Support & Aide :** Une équipe et une communauté à l'écoute pour vous aider en cas de besoin.
 * 💡 **Suggestions :** Partagez vos idées et aidez-nous à choisir les prochaines pépites à ajouter au catalogue.
 
-🎮 **Cliquez ici pour rejoindre le serveur :** [https://discord.gg/F9mrWarVWe](https://discord.gg/F9mrWarVWe)
+🎮 **Cliquez ici pour rejoindre le serveur :** Serveur clôturer ! 
 
 
 ---
